@@ -1,0 +1,54 @@
+name: teknofavola
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-directus}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-directus}
+      POSTGRES_DB: ${POSTGRES_DB:-teknofavola}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-directus} -d ${POSTGRES_DB:-teknofavola}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  directus:
+    image: directus/directus:11
+    restart: unless-stopped
+    ports:
+      - "${DIRECTUS_PORT:-8055}:8055"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      KEY: ${DIRECTUS_KEY:-tf-local-key-change-me}
+      SECRET: ${DIRECTUS_SECRET:-tf-local-secret-change-me}
+      DB_CLIENT: pg
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${POSTGRES_DB:-teknofavola}
+      DB_USER: ${POSTGRES_USER:-directus}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-directus}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL:-admin@teknofavola.it}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD:-change-me-now}
+      PUBLIC_URL: ${DIRECTUS_PUBLIC_URL:-http://localhost:8055}
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: ${SITE_ORIGIN:-http://localhost:5173}
+      WEBSOCKETS_ENABLED: "false"
+      # Rate-limit Directus's own login/API to slow down brute-force + abuse.
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_POINTS: "50"
+      RATE_LIMITER_DURATION: "1"
+    volumes:
+      - ./uploads:/directus/uploads
+      - extensions-data:/directus/extensions
+
+volumes:
+  db-data:
+  extensions-data:

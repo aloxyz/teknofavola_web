@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800;900&amp;display=swap">
+<link rel="stylesheet" href="_ds/modernist-ccfe7c28-1729-44c5-b50f-a059607df958/styles.css">
+<script src="_ds/modernist-ccfe7c28-1729-44c5-b50f-a059607df958/_ds_bundle.js"></script>
+<style>
+:root{
+  --tf-bg:#0b0b0b;--tf-bg-2:#111010;--tf-bg-3:#151414;
+  --tf-ink:#f3f2f2;--tf-ink-2:rgba(243,242,242,.78);--tf-ink-3:rgba(243,242,242,.64);
+  --tf-line:rgba(243,242,242,.32);--tf-line-2:rgba(243,242,242,.2);--tf-field:rgba(243,242,242,.5);
+  --tf-accent:#ff563c;--tf-accent-hi:#ff9783;
+}
+html{scroll-behavior:smooth}
+html,body{margin:0;padding:0;background:var(--tf-bg);color:var(--tf-ink);font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--tf-accent);text-decoration:none}
+a:hover{color:var(--tf-accent-hi)}
+button{font-family:inherit}
+input,textarea,select{font-family:inherit}
+input::placeholder,textarea::placeholder{color:rgba(243,242,242,.55)}
+::selection{background:var(--tf-accent);color:var(--tf-bg)}
+:focus-visible{outline:2px solid var(--tf-accent);outline-offset:2px}
+.tf-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+@keyframes tfFlash{0%{filter:brightness(1)}12%{filter:brightness(2.2) contrast(1.35)}20%{filter:brightness(.75)}34%{filter:brightness(1.9) contrast(1.2)}46%{filter:brightness(1)}60%{filter:brightness(2.4) contrast(1.4)}72%{filter:brightness(.85)}86%{filter:brightness(1.7)}100%{filter:brightness(1)}}
+@keyframes tfBob{0%,100%{transform:translateY(0);opacity:.62}50%{transform:translateY(9px);opacity:1}}
+@keyframes tfPulse{0%,100%{opacity:.28}50%{opacity:.6}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}html{scroll-behavior:auto}}
+#tf-main::-webkit-scrollbar{width:10px}
+#tf-main::-webkit-scrollbar-thumb{background:#2a2828}
+@media (max-width:1100px){
+  #tf-booking{grid-template-columns:1fr!important}
+  #tf-booking > div:first-child{border-right:0!important;border-bottom:2px solid var(--tf-line)!important}
+}
+@media (max-width:900px){
+  #tf-shell{flex-direction:column!important}
+  #tf-side{position:fixed!important;top:0!important;left:0!important;z-index:50;width:100%!important;height:auto!important;border-right:0!important;border-bottom:2px solid var(--tf-line)!important;flex-direction:row!important;align-items:center!important;gap:14px!important;padding:12px 18px!important}
+  #tf-side[data-open="1"]{flex-direction:column!important;align-items:stretch!important;max-height:100vh;overflow:auto}
+  #tf-nav,#tf-sidefoot{display:none!important}
+  #tf-side[data-open="1"] #tf-nav,#tf-side[data-open="1"] #tf-sidefoot{display:flex!important}
+  #tf-burger{display:flex!important;margin-left:auto}
+  #tf-main{padding-top:72px!important}
+}
+@media (max-width:640px){
+  .tf-socialrow{grid-template-columns:1fr!important;gap:14px!important}
+  .tf-tagline{white-space:normal!important;text-align:center}
+  .tf-drawer{width:100%!important}
+}
+</style>
+</helmet>
+<div id="tf-shell" style="display:flex;min-height:100vh;background:var(--tf-bg)">
+
+  <aside id="tf-side" style="width:296px;flex:none;border-right:2px solid var(--tf-line);display:flex;flex-direction:column;gap:28px;padding:26px 22px 22px;position:sticky;top:0;height:100vh;background:var(--tf-bg)">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button onClick="{{ goHome }}" style="border:0;background:transparent;padding:0;cursor:pointer;display:block;width:64px;flex:none" aria-label="TeknoFavola — home">
+        <img src="assets/logo-tf-black.png" alt="" style="width:100%;display:block;mix-blend-mode:screen">
+      </button>
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+        <span style="font-weight:900;font-size:15px;letter-spacing:-0.01em;line-height:1">TEKNOFAVOLA</span>
+        <span style="font-size:9px;letter-spacing:0.18em;color:var(--tf-ink-3);line-height:1.3">{{ t.collectiveTag }}</span>
+      </div>
+      <button id="tf-burger" onClick="{{ toggleMenu }}" aria-controls="tf-nav" aria-expanded="{{ menuExpanded }}" style="display:none;margin-left:auto;border:2px solid var(--tf-line);background:transparent;color:var(--tf-ink);width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer;font-size:13px" style-hover="border-color:var(--tf-accent);color:var(--tf-accent)">
+        <span class="tf-sr">{{ t.menu }}</span>☰
+      </button>
+    </div>
+
+    <nav id="tf-nav" aria-label="{{ t.menu }}" style="display:flex;flex-direction:column;border-top:2px solid var(--tf-line)">
+      <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
+        <button onClick="{{ item.go }}" style="{{ item.style }}" style-hover="color:var(--tf-accent-hi)" aria-current="{{ item.current }}">
+          <span style="display:block;font-size:9px;letter-spacing:.16em;color:var(--tf-ink-3);margin-bottom:4px">{{ item.num }}</span>
+          {{ item.label }}
+        </button>
+      </sc-for>
+    </nav>
+
+    <div id="tf-sidefoot" style="margin-top:auto;display:flex;flex-direction:column;gap:14px;border-top:2px solid var(--tf-line);padding-top:16px">
+      <button onClick="{{ toggleLang }}" aria-label="{{ t.langSwitch }}" style="align-self:flex-start;display:flex;gap:0;border:2px solid var(--tf-line);background:transparent;cursor:pointer;padding:0">
+        <span style="{{ itStyle }}">IT</span>
+        <span style="{{ enStyle }}">EN</span>
+      </button>
+      <a href="mailto:teknofavola@gmail.com" style="font-size:12px;color:var(--tf-ink-2);letter-spacing:.01em;word-break:break-all">teknofavola@gmail.com</a>
+    </div>
+  </aside>
+
+  <main id="tf-main" ref="{{ mainRef }}" style="flex:1;min-width:0">
+
+    <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+      <div role="status" aria-live="polite" style="padding:clamp(28px,5vw,72px) clamp(24px,5vw,80px) 70px;display:flex;flex-direction:column;gap:26px">
+        <span style="font-size:10px;letter-spacing:.28em;color:var(--tf-accent)">{{ t.loading }}</span>
+        <div style="height:clamp(44px,7vw,96px);background:var(--tf-bg-3);animation:tfPulse 1.4s ease-in-out infinite;max-width:640px"></div>
+        <div style="height:16px;background:var(--tf-bg-3);animation:tfPulse 1.4s ease-in-out .15s infinite;max-width:420px"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:2px">
+          <sc-for list="{{ skeletonCards }}" as="s" hint-placeholder-count="6">
+            <div style="border:2px solid var(--tf-line-2);padding:22px;display:flex;flex-direction:column;gap:14px">
+              <div style="height:10px;width:40%;background:var(--tf-bg-3);animation:tfPulse 1.4s ease-in-out infinite"></div>
+              <div style="aspect-ratio:1/1.35;background:var(--tf-bg-3);animation:tfPulse 1.4s ease-in-out .2s infinite"></div>
+              <div style="height:14px;width:75%;background:var(--tf-bg-3);animation:tfPulse 1.4s ease-in-out .3s infinite"></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+      <div role="alert" style="padding:clamp(28px,5vw,72px) clamp(24px,5vw,80px) 70px;display:flex;flex-direction:column;gap:20px;align-items:flex-start">
+        <span style="font-size:10px;letter-spacing:.28em;color:var(--tf-accent)">{{ t.errorKicker }}</span>
+        <h1 style="margin:0;font-size:clamp(28px,5.4vw,72px);line-height:.96;letter-spacing:-0.04em;max-width:24ch">{{ t.errorTitle }}</h1>
+        <p style="margin:0;font-size:14px;line-height:1.7;max-width:56ch;color:var(--tf-ink-2)">{{ t.errorBody }}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:2px">
+          <button onClick="{{ retry }}" style="display:flex;align-items:center;gap:10px;background:var(--tf-accent);color:var(--tf-bg);border:0;padding:14px 18px;font-weight:800;font-size:13px;cursor:pointer;text-align:left" style-hover="background:var(--tf-accent-hi)">{{ t.retry }}</button>
+          <a href="mailto:teknofavola@gmail.com" style="display:flex;align-items:center;gap:10px;border:2px solid var(--tf-line);color:var(--tf-ink);padding:14px 18px;font-weight:800;font-size:13px" style-hover="border-color:var(--tf-accent)">teknofavola@gmail.com</a>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <section style="container-type:inline-size;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:64px 32px;overflow:hidden;border-bottom:2px solid var(--tf-line);position:relative">
+          <h1 class="tf-sr">TEKNOFAVOLA</h1>
+          <img ref="{{ logoRef }}" src="assets/logo-tf-black.png" alt="TeknoFavola" style="width:min(58vh,520px);max-width:82%;display:block;mix-blend-mode:screen;cursor:crosshair;will-change:transform;transition:transform .5s cubic-bezier(.2,.8,.2,1)" style-hover="animation:tfFlash 1.1s steps(6) infinite">
+          <p class="tf-tagline" style="margin:0;max-width:100%;display:flex;align-items:center;justify-content:center;gap:.3em;white-space:nowrap;font-weight:900;font-size:clamp(10px,3cqw,40px);line-height:1.15;letter-spacing:-0.02em">
+            <span style="font-size:14px">{{ t.tagline }}</span>
+          </p>
+          <span style="position:absolute;left:0;right:0;bottom:26px;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none">
+            <span style="font-size:13px;letter-spacing:.28em;font-weight:800;color:var(--tf-ink-2);animation:tfBob 1.9s ease-in-out infinite">{{ t.scroll }}</span>
+            <span aria-hidden="true" style="font-size:26px;line-height:1;color:var(--tf-ink-2);animation:tfBob 1.9s ease-in-out .12s infinite">↓</span>
+          </span>
+        </section>
+
+        <section style="padding:clamp(40px,7vw,96px) clamp(24px,5vw,80px);border-bottom:2px solid var(--tf-line)">
+          <h2 style="margin:0 0 26px;font-size:10px;letter-spacing:.28em;color:var(--tf-accent);font-weight:800">{{ t.bioKicker }}</h2>
+          <p style="margin:0;font-weight:800;font-size:clamp(30px,4.6vw,68px);line-height:1.04;letter-spacing:-0.03em;max-width:20ch;text-wrap:pretty;color:var(--tf-ink)">{{ t.bioText }}</p>
+          <p style="margin:34px 0 0;font-size:clamp(15px,1.5vw,20px);line-height:1.7;max-width:62ch;text-wrap:pretty;color:var(--tf-ink-2)">{{ t.bioParagraph }}</p>
+        </section>
+
+        <section style="padding:clamp(36px,5vw,72px) clamp(24px,5vw,80px);border-bottom:2px solid var(--tf-line)">
+          <h2 style="margin:0 0 18px;font-size:10px;letter-spacing:.28em;color:var(--tf-ink-3);font-weight:800">{{ t.contactKicker }}</h2>
+          <a href="mailto:teknofavola@gmail.com" style="display:block;max-width:100%;font-weight:900;font-size:clamp(20px,5.4vw,84px);line-height:1;letter-spacing:-0.04em;color:var(--tf-ink);word-break:break-word" style-hover="color:var(--tf-accent)">teknofavola@gmail.com</a>
+        </section>
+
+        <section style="padding:clamp(36px,5vw,72px) clamp(24px,5vw,80px) 0">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px">
+            <h2 style="margin:0;font-size:clamp(22px,2.6vw,38px);letter-spacing:-0.02em">{{ t.socialTitle }}</h2>
+          </div>
+        </section>
+        <div style="border-top:2px solid var(--tf-line)">
+          <sc-for list="{{ socialGroups }}" as="g" hint-placeholder-count="4">
+            <div class="tf-socialrow" style="display:grid;grid-template-columns:minmax(220px,0.9fr) 1.1fr;gap:20px 32px;align-items:center;padding:26px clamp(24px,5vw,80px);border-bottom:1px solid var(--tf-line-2)">
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <span style="font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">{{ g.num }}</span>
+                <h3 style="margin:0;font-weight:900;font-size:clamp(18px,2.2vw,30px);letter-spacing:-0.025em;line-height:1.05;text-wrap:pretty">{{ g.brand }}</h3>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:2px;min-width:0;align-self:center">
+                <sc-for list="{{ g.links }}" as="l" hint-placeholder-count="2">
+                  <a href="{{ l.href }}" target="_blank" rel="noopener" style="{{ l.style }}" aria-disabled="{{ l.disabled }}" style-hover="background:var(--tf-bg-3)">
+                    <span>{{ l.platform }}</span>
+                    <span aria-hidden="true" style="opacity:.85">{{ l.mark }}</span>
+                    <span class="tf-sr">{{ l.srState }}</span>
+                  </a>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noSocials }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:34px clamp(24px,5vw,80px);border-bottom:1px solid var(--tf-line-2);display:flex;flex-direction:column;gap:10px">
+              <span style="font-weight:900;font-size:clamp(18px,2.4vw,28px);letter-spacing:-0.025em;color:var(--tf-ink-3)">{{ t.socialsEmptyTitle }}</span>
+              <a href="mailto:teknofavola@gmail.com" style="font-weight:800;font-size:14px">teknofavola@gmail.com</a>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isFavole }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <header style="padding:clamp(36px,6vw,88px) clamp(24px,5vw,80px) 28px;border-bottom:2px solid var(--tf-line)">
+          <h1 style="margin:0;font-size:clamp(34px,7vw,104px);line-height:.92;letter-spacing:-0.04em">LE NOSTRE<br>FAVOLE</h1>
+          <p style="margin:26px 0 0;font-size:13px;line-height:1.7;max-width:56ch;color:var(--tf-ink-2)">{{ t.favoleIntro }}</p>
+        </header>
+
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:26px clamp(24px,5vw,80px) 18px;border-bottom:2px solid var(--tf-line)">
+          <h2 style="margin:0;font-size:clamp(20px,2.6vw,34px);letter-spacing:-0.025em">01 / {{ t.upcomingEvents }}</h2>
+          <span style="font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">{{ upcomingCount }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:0;border-bottom:2px solid var(--tf-line)">
+          <sc-for list="{{ upcoming }}" as="ev" hint-placeholder-count="1">
+            <button onClick="{{ ev.open }}" style="{{ ev.cardStyle }}" style-hover="background:var(--tf-bg-3)">
+              <span style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">
+                <span>{{ ev.num }}</span>
+                <span style="{{ ev.dateStyle }}">{{ ev.date }}</span>
+              </span>
+              <span style="display:flex;align-items:center;justify-content:center;aspect-ratio:1/1.35;border:2px solid var(--tf-line-2);background:var(--tf-bg-2);font-size:9px;letter-spacing:.2em;color:var(--tf-ink-3);text-align:center;padding:12px">{{ t.flyerSlot }}</span>
+              <span style="display:block;font-weight:900;font-size:19px;line-height:1.1;letter-spacing:-0.02em;text-wrap:pretty;overflow-wrap:anywhere">{{ ev.title }}</span>
+              <span style="display:block;font-size:10px;letter-spacing:.16em;color:var(--tf-accent)">{{ t.openEvent }} →</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ true }}">
+            <div style="grid-column:1/-1;padding:34px clamp(24px,5vw,80px);display:flex;flex-direction:column;gap:10px">
+              <span style="font-weight:900;font-size:clamp(18px,2.4vw,30px);letter-spacing:-0.025em;color:var(--tf-ink-3)">{{ t.upcomingEmptyTitle }}</span>
+              <span style="font-size:12px;line-height:1.7;max-width:56ch;color:var(--tf-ink-2)">{{ t.upcomingEmptyBody }}</span>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:26px clamp(24px,5vw,80px) 18px;border-bottom:2px solid var(--tf-line)">
+          <h2 style="margin:0;font-size:clamp(20px,2.6vw,34px);letter-spacing:-0.025em">02 / {{ t.pastEvents }}</h2>
+          <span style="font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">{{ pastCount }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:0;border-bottom:2px solid var(--tf-line)">
+          <sc-for list="{{ events }}" as="ev" hint-placeholder-count="7">
+            <button onClick="{{ ev.open }}" style="{{ ev.cardStyle }}" style-hover="background:var(--tf-bg-3)">
+              <span style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">
+                <span>{{ ev.num }}</span>
+                <span style="{{ ev.dateStyle }}">{{ ev.date }}</span>
+              </span>
+              <span style="display:flex;align-items:center;justify-content:center;aspect-ratio:1/1.35;border:2px solid var(--tf-line-2);background:var(--tf-bg-2);font-size:9px;letter-spacing:.2em;color:var(--tf-ink-3);text-align:center;padding:12px">{{ t.flyerSlot }}</span>
+              <span style="display:block;font-weight:900;font-size:19px;line-height:1.1;letter-spacing:-0.02em;text-wrap:pretty;overflow-wrap:anywhere">{{ ev.title }}</span>
+              <span style="display:block;font-size:10px;letter-spacing:.16em;color:var(--tf-accent)">{{ t.openEvent }} →</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ noPast }}" hint-placeholder-val="{{ false }}">
+            <div style="grid-column:1/-1;padding:34px clamp(24px,5vw,80px);display:flex;flex-direction:column;gap:10px">
+              <span style="font-weight:900;font-size:clamp(18px,2.4vw,30px);letter-spacing:-0.025em;color:var(--tf-ink-3)">{{ t.pastEmptyTitle }}</span>
+              <span style="font-size:12px;line-height:1.7;max-width:56ch;color:var(--tf-ink-2)">{{ t.pastEmptyBody }}</span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isBooking }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <header style="padding:clamp(36px,6vw,80px) clamp(24px,5vw,80px) 34px;border-bottom:2px solid var(--tf-line)">
+          <span style="display:block;font-size:10px;letter-spacing:.28em;color:var(--tf-accent);margin-bottom:16px">02 / BOOKING ARTIST</span>
+          <h1 style="margin:0;font-size:clamp(20px,6.6vw,72px);line-height:.95;letter-spacing:-0.045em">
+            <a href="mailto:teknofavola@gmail.com" style="display:block;max-width:100%;font-weight:900;color:var(--tf-ink);word-break:break-word" style-hover="color:var(--tf-accent)">teknofavola@gmail.com</a>
+          </h1>
+          <p style="margin:26px 0 0;font-size:13px;line-height:1.7;max-width:52ch;color:var(--tf-ink-2)">{{ t.bookingIntro }}</p>
+        </header>
+        <div id="tf-booking" style="display:grid;grid-template-columns:minmax(240px,340px) 1fr;align-items:start">
+          <div style="border-right:2px solid var(--tf-line)">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:2px solid var(--tf-line);font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">
+              <span>{{ t.artistIndex }}</span><span>{{ artistCount }}</span>
+            </div>
+            <nav aria-label="{{ t.artistIndex }}" style="display:flex;flex-direction:column;max-height:min(70vh,760px);overflow:auto">
+              <sc-for list="{{ artists }}" as="a" hint-placeholder-count="12">
+                <button onClick="{{ a.select }}" style="{{ a.rowStyle }}" aria-current="{{ a.current }}" style-hover="color:var(--tf-accent-hi)">
+                  <span style="width:26px;flex:none;font-size:10px;letter-spacing:.1em;color:var(--tf-ink-3)">{{ a.num }}</span>
+                  <span style="font-weight:800;font-size:15px;letter-spacing:-0.01em;overflow-wrap:anywhere">{{ a.name }}</span>
+                </button>
+              </sc-for>
+            </nav>
+            <sc-if value="{{ noArtists }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:26px 20px;display:flex;flex-direction:column;gap:8px">
+                <span style="font-weight:900;font-size:16px;letter-spacing:-0.02em;color:var(--tf-ink-3)">{{ t.artistsEmptyTitle }}</span>
+                <span style="font-size:12px;line-height:1.6;color:var(--tf-ink-2)">{{ t.artistsEmptyBody }}</span>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="padding:clamp(24px,3vw,44px) clamp(24px,4vw,56px) 70px;min-width:0">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:30px">
+              <span style="font-size:9px;letter-spacing:.2em;color:var(--tf-ink-3)">{{ t.profileType }}</span>
+              <div role="group" aria-label="{{ t.profileType }}" style="display:flex;border:2px solid var(--tf-line)">
+                <button onClick="{{ setDj }}" style="{{ djTabStyle }}" aria-pressed="{{ djPressed }}">DJ</button>
+                <button onClick="{{ setCreative }}" style="{{ creativeTabStyle }}" aria-pressed="{{ creativePressed }}">{{ t.creative }}</button>
+              </div>
+            </div>
+
+            <h2 style="margin:0;font-size:clamp(26px,5vw,68px);line-height:.96;letter-spacing:-0.04em;overflow-wrap:anywhere">{{ activeArtist.name }}</h2>
+            <span style="display:inline-block;margin-top:12px;font-size:10px;letter-spacing:.18em;color:var(--tf-accent);border:2px solid var(--tf-accent);padding:5px 9px">{{ activeArtist.roleLabel }}</span>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;margin-top:30px">
+              <sc-for list="{{ activeArtist.slots }}" as="slot" hint-placeholder-count="3">
+                <div style="display:flex;align-items:flex-end;aspect-ratio:4/5;border:2px solid var(--tf-line-2);background:var(--tf-bg-2);padding:12px">
+                  <span style="font-size:9px;letter-spacing:.2em;color:var(--tf-ink-3)">{{ slot }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="margin-top:36px;border-top:2px solid var(--tf-line);padding-top:22px">
+              <h3 style="margin:0 0 12px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ t.bio }}</h3>
+              <p style="margin:0;font-size:15px;line-height:1.65;max-width:60ch;color:var(--tf-ink-2)">{{ activeArtist.bio }}</p>
+            </div>
+
+            <div style="margin-top:30px;border-top:2px solid var(--tf-line);padding-top:22px">
+              <h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ t.social }}</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:2px">
+                <sc-for list="{{ artistSocialSlots }}" as="s" hint-placeholder-count="3">
+                  <span style="border:2px solid var(--tf-line-2);padding:9px 14px;font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">{{ s }}</span>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{ isDjProfile }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:30px;border-top:2px solid var(--tf-line);padding-top:22px">
+                <h3 style="margin:0 0 16px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">DJ SET</h3>
+                <sc-for list="{{ djSets }}" as="d" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--tf-line-2)">
+                    <span style="font-weight:900;font-size:17px;letter-spacing:-0.01em;color:var(--tf-ink-2)">{{ d.title }}</span>
+                    <span style="margin-left:auto;font-size:9px;letter-spacing:.18em;color:var(--tf-ink-3)">{{ d.state }}</span>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ noDjSets }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:block;font-size:12px;line-height:1.7;color:var(--tf-ink-2)">{{ t.djSetsEmpty }}</span>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <form onSubmit="{{ submitForm }}" novalidate="{{ false }}" style="margin-top:40px;border:2px solid var(--tf-line);padding:clamp(18px,2.4vw,30px)">
+              <h3 style="margin:0 0 6px;font-size:20px;letter-spacing:-0.02em">{{ t.bookingFormTitle }}</h3>
+              <p style="margin:0 0 20px;font-size:12px;color:var(--tf-ink-2)">{{ t.requiredNote }}</p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+                <sc-for list="{{ bookingFields }}" as="f" hint-placeholder-count="5">
+                  <label style="{{ f.wrapStyle }}">
+                    <span style="font-size:9px;letter-spacing:.18em;color:var(--tf-ink-2)">{{ f.label }}</span>
+                    <sc-if value="{{ f.isTextarea }}" hint-placeholder-val="{{ false }}">
+                      <textarea name="{{ f.name }}" rows="3" required="{{ f.required }}" style="border:0;border-bottom:2px solid var(--tf-field);background:transparent;color:var(--tf-ink);font-size:14px;padding:8px 0;resize:vertical;width:100%"></textarea>
+                    </sc-if>
+                    <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                      <input type="{{ f.type }}" name="{{ f.name }}" autocomplete="{{ f.autocomplete }}" required="{{ f.required }}" style="border:0;border-bottom:2px solid var(--tf-field);background:transparent;color:var(--tf-ink);font-size:14px;padding:8px 0;width:100%">
+                    </sc-if>
+                  </label>
+                </sc-for>
+              </div>
+              <button type="submit" style="margin-top:24px;display:flex;align-items:center;gap:10px;background:var(--tf-accent);color:var(--tf-bg);border:0;padding:14px 18px;font-weight:800;font-size:13px;letter-spacing:.02em;cursor:pointer;text-align:left" style-hover="background:var(--tf-accent-hi)">{{ t.send }} →</button>
+              <span role="status" aria-live="polite" style="{{ sentStyle }}">{{ sentMessage }}</span>
+            </form>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSoon }}" hint-placeholder-val="{{ false }}">
+      <div>
+        <header style="padding:clamp(36px,6vw,88px) clamp(24px,5vw,80px) 30px;border-bottom:2px solid var(--tf-line)">
+          <span style="display:block;font-size:10px;letter-spacing:.28em;color:var(--tf-accent);margin-bottom:18px">{{ soon.kicker }}</span>
+          <h1 style="margin:0;font-size:clamp(32px,6.6vw,96px);line-height:.94;letter-spacing:-0.04em">{{ soon.titleA }}<br>{{ soon.titleB }}</h1>
+          <p style="margin:24px 0 0;font-size:13px;line-height:1.7;max-width:56ch;color:var(--tf-ink-2)">{{ soon.intro }}</p>
+        </header>
+
+        <section style="padding:clamp(44px,8vw,120px) clamp(24px,5vw,80px);border-bottom:2px solid var(--tf-line);background:var(--tf-accent);color:var(--tf-bg)">
+          <h2 style="margin:0 0 18px;font-size:10px;letter-spacing:.28em;font-weight:800">{{ t.status }}</h2>
+          <p style="margin:0;font-weight:900;font-size:clamp(44px,11vw,180px);line-height:.86;letter-spacing:-0.05em">COMING<br>SOON</p>
+        </section>
+
+        <section style="padding:clamp(30px,4vw,56px) clamp(24px,5vw,80px);border-bottom:2px solid var(--tf-line)">
+          <h2 style="margin:0 0 20px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ t.channels }}</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:2px">
+            <sc-for list="{{ soon.channels }}" as="c" hint-placeholder-count="4">
+              <span style="border:2px solid var(--tf-line-2);padding:12px 16px;font-size:11px;letter-spacing:.16em;color:var(--tf-ink-3)">{{ c }}</span>
+            </sc-for>
+          </div>
+          
+        </section>
+
+        <section style="padding:clamp(30px,4vw,56px) clamp(24px,5vw,80px)">
+          <h2 style="margin:0 0 8px;font-size:clamp(22px,2.8vw,40px);letter-spacing:-0.025em">{{ t.futureStructure }}</h2>
+          <p style="margin:0 0 26px;font-size:12px;line-height:1.7;color:var(--tf-ink-2);max-width:56ch">{{ soon.structureHint }}</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px">
+            <sc-for list="{{ soon.blocks }}" as="b" hint-placeholder-count="4">
+              <div style="border:2px solid var(--tf-line-2);padding:20px;display:flex;flex-direction:column;gap:12px;min-height:186px">
+                <span style="font-size:9px;letter-spacing:.2em;color:var(--tf-accent)">{{ b.tag }}</span>
+                <h3 style="margin:0;font-weight:900;font-size:19px;letter-spacing:-0.02em;line-height:1.15;text-wrap:pretty">{{ b.title }}</h3>
+                <span style="font-size:12px;line-height:1.6;color:var(--tf-ink-2)">{{ b.body }}</span>
+                <span style="margin-top:auto;font-size:9px;letter-spacing:.18em;color:var(--tf-ink-3)">{{ b.foot }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <form onSubmit="{{ submitForm }}" style="margin-top:44px;border-top:2px solid var(--tf-line);padding-top:24px;padding-bottom:60px">
+            <h3 style="margin:0 0 6px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ soon.formTitle }}</h3>
+            <p style="margin:0 0 16px;font-size:12px;color:var(--tf-ink-2)">{{ t.requiredNote }}</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;max-width:900px">
+              <sc-for list="{{ soon.fields }}" as="f" hint-placeholder-count="5">
+                <label style="{{ f.wrapStyle }}">
+                  <span style="font-size:9px;letter-spacing:.18em;color:var(--tf-ink-2)">{{ f.label }}</span>
+                  <sc-if value="{{ f.isTextarea }}" hint-placeholder-val="{{ false }}">
+                    <textarea name="{{ f.name }}" rows="3" required="{{ f.required }}" style="border:0;border-bottom:2px solid var(--tf-field);background:transparent;color:var(--tf-ink);font-size:14px;padding:8px 0;resize:vertical;width:100%"></textarea>
+                  </sc-if>
+                  <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                    <input type="{{ f.type }}" name="{{ f.name }}" autocomplete="{{ f.autocomplete }}" required="{{ f.required }}" style="border:0;border-bottom:2px solid var(--tf-field);background:transparent;color:var(--tf-ink);font-size:14px;padding:8px 0;width:100%">
+                  </sc-if>
+                </label>
+              </sc-for>
+            </div>
+            <button type="submit" style="margin-top:24px;display:flex;align-items:center;gap:10px;background:var(--tf-accent);color:var(--tf-bg);border:0;padding:14px 18px;font-weight:800;font-size:13px;cursor:pointer;text-align:left" style-hover="background:var(--tf-accent-hi)">{{ t.send }} →</button>
+            <span role="status" aria-live="polite" style="{{ sentStyle }}">{{ sentMessage }}</span>
+          </form>
+        </section>
+      </div>
+    </sc-if>
+
+    <footer style="border-top:2px solid var(--tf-line);padding:clamp(30px,4vw,56px) clamp(24px,5vw,80px) 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:32px 40px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <img src="assets/logo-tf-black.png" alt="TeknoFavola" style="width:78px;display:block;mix-blend-mode:screen">
+        <span style="font-size:11px;letter-spacing:.16em;color:var(--tf-ink-3);line-height:1.7;max-width:280px">{{ t.footerAbout }}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <h2 style="margin:0;font-size:9px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ t.footerContact }}</h2>
+        <a href="mailto:teknofavola@gmail.com" style="font-weight:800;font-size:13px;color:var(--tf-ink);word-break:break-all" style-hover="color:var(--tf-accent)">teknofavola@gmail.com</a>
+        <sc-for list="{{ footerSocials }}" as="s" hint-placeholder-count="3">
+          <a href="{{ s.href }}" target="_blank" rel="noopener" style="{{ s.style }}">{{ s.label }}</a>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <h2 style="margin:0;font-size:9px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ t.footerLegal }}</h2>
+        <span style="font-size:11px;letter-spacing:.06em;color:var(--tf-ink-2);line-height:1.7">{{ footerRights }}</span>
+        <span style="font-size:11px;letter-spacing:.06em;color:var(--tf-ink-3);line-height:1.7">{{ t.footerCredit }}</span>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<sc-if value="{{ eventOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:80;background:rgba(11,11,11,.94);display:flex;justify-content:flex-end">
+    <div class="tf-drawer" role="dialog" aria-modal="true" aria-label="{{ activeEvent.title }}" style="width:min(620px,100%);height:100%;overflow:auto;background:var(--tf-bg);border-left:2px solid var(--tf-line);padding:clamp(22px,3vw,40px)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px">
+        <span style="font-size:10px;letter-spacing:.2em;color:var(--tf-accent)">{{ activeEvent.num }} / {{ t.event }}</span>
+        <button ref="{{ closeRef }}" onClick="{{ closeEvent }}" style="border:2px solid var(--tf-line);background:transparent;color:var(--tf-ink);width:44px;height:44px;cursor:pointer;font-size:14px;flex:none" style-hover="border-color:var(--tf-accent);color:var(--tf-accent)">
+          <span class="tf-sr">{{ t.close }}</span>✕
+        </button>
+      </div>
+      <h2 style="margin:18px 0 0;font-size:clamp(24px,4.2vw,52px);line-height:.98;letter-spacing:-0.035em;overflow-wrap:anywhere">{{ activeEvent.title }}</h2>
+      <div style="display:flex;align-items:center;justify-content:center;aspect-ratio:1/1.35;border:2px solid var(--tf-line-2);background:var(--tf-bg-2);margin-top:24px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);text-align:center;padding:16px">{{ t.flyerSlot }}</div>
+      <div style="margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px">
+        <sc-for list="{{ eventMeta }}" as="m" hint-placeholder-count="4">
+          <div style="border:2px solid var(--tf-line-2);padding:14px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:9px;letter-spacing:.18em;color:var(--tf-ink-3)">{{ m.label }}</span>
+            <span style="font-size:12px;color:var(--tf-ink-2);overflow-wrap:anywhere">{{ m.value }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px">
+        <h3 style="margin:0 0 10px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ t.description }}</h3>
+        <p style="margin:0;font-size:14px;line-height:1.7;color:var(--tf-ink-2)">{{ activeEvent.description }}</p>
+      </div>
+      <div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px;padding-bottom:40px">
+        <h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{{ t.gallery }}</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">
+          <sc-for list="{{ gallerySlots }}" as="g" hint-placeholder-count="6">
+            <div style="aspect-ratio:1/1;border:2px solid var(--tf-line-2);background:var(--tf-bg-2)"></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#c8ff2e&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#ff563c&quot;,&quot;#ec3013&quot;,&quot;#c8ff2e&quot;,&quot;#f3f2f2&quot;],&quot;section&quot;:&quot;Identità&quot;},&quot;dataState&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;ready&quot;,&quot;options&quot;:[&quot;ready&quot;,&quot;loading&quot;,&quot;error&quot;,&quot;empty&quot;,&quot;stress&quot;],&quot;tsType&quot;:&quot;'ready' | 'loading' | 'error' | 'empty' | 'stress'&quot;,&quot;section&quot;:&quot;Stati limite&quot;}}">
+const NAV = [
+  { key: 'home', label: 'HOME', num: '00' },
+  { key: 'favole', label: 'LE NOSTRE FAVOLE', num: '01' },
+  { key: 'booking', label: 'BOOKING ARTIST', num: '02' },
+  { key: 'once', label: 'ONCE UPON A TIME', num: '03' },
+  { key: 'label', label: 'THE FABLE LABEL', num: '04' },
+  { key: 'studio', label: 'THE FABLE STUDIO', num: '05' }
+];
+
+const PAST_EVENTS = [
+  'LA FAVOLA DI MEZZA ESTATE',
+  "A MESSINA NON C'È NENTI",
+  'LA DIVINA TEKNO DI OKUTO',
+  'SICILY TEKNO UNITED',
+  'LA FAVOLA DEL PURGATORIO',
+  "SOTTO L'ALBERO DELLE FAVOLE",
+  'CHE FINE HA FATTO WILLY WONKA'
+];
+
+const ARTIST_ROSTER = ['RICCARDO LENTINI','KEVIN MAZZARELLO','FABIANA MIRODDI','ALO','ANALØG23','CYNNAMIDE','DØN CICCIØ','FEFOX','FLOW.D','JASON','RJJCK','VERTEK']
+  .map((n) => n.trim())
+  .sort((a, b) => a.localeCompare(b, 'it', { sensitivity: 'base', numeric: true }));
+
+const SOCIAL_GROUPS = [
+  { brand: 'TEKNOFAVOLA', links: [
+    { platform: 'INSTAGRAM', url: 'https://www.instagram.com/teknofavola?igsi=MXJkZWJkbWRmaXB3ZA%3D%3D&utm_source=qr' }
+  ] },
+  { brand: 'ONCE UPON A TIME', links: [
+    { platform: 'INSTAGRAM', url: '' },
+    { platform: 'YOUTUBE', url: '' }
+  ] },
+  { brand: 'THE FABLE LABEL', links: [
+    { platform: 'INSTAGRAM', url: '' },
+    { platform: 'YOUTUBE', url: '' },
+    { platform: 'SPOTIFY', url: '' },
+    { platform: 'SOUNDCLOUD', url: '' }
+  ] },
+  { brand: 'THE FABLE STUDIO', links: [
+    { platform: 'INSTAGRAM', url: '' }
+  ] }
+];
+
+const COPY = {
+  it: {
+    collectiveTag: 'COLLETTIVO TEKNO',
+    menu: 'MENU',
+    langSwitch: 'Cambia lingua',
+    tagline: 'BENVENUTI ♦ NEL ♦ MONDO ♦ DELLE ♦ FAVOLE',
+    scroll: 'SCORRI',
+    bioKicker: 'CHI SIAMO',
+    bioText: 'UNA CREW FAVOLOSA',
+    bioParagraph: 'Spazio per il paragrafo della bio: chi è TeknoFavola, come nasce il collettivo, cosa succede in una nostra serata. Testo da fornire.',
+    contactKicker: 'CONTACT US VIA',
+    socialTitle: 'SOCIAL',
+    socialsEmptyTitle: 'CANALI IN ARRIVO',
+    pastEvents: 'EVENTI PASSATI',
+    upcomingEvents: 'PROSSIMI EVENTI',
+    upcomingEmptyTitle: 'NESSUN EVENTO IN PROGRAMMA',
+    upcomingEmptyBody: 'Le prossime date compaiono qui appena annunciate. Nel frattempo puoi scorrere gli eventi passati.',
+    pastEmptyTitle: 'ARCHIVIO IN COSTRUZIONE',
+    pastEmptyBody: 'Gli eventi passati saranno pubblicati a breve.',
+    favoleIntro: 'Le favole che abbiamo raccontato e quelle che stanno arrivando: flyer, date e racconto di ogni serata.',
+    flyerSlot: 'FLYER IN ARRIVO',
+    openEvent: 'APRI',
+    noDate: 'DATA IN ARRIVO',
+    event: 'EVENTO',
+    description: 'DESCRIZIONE',
+    descEmpty: 'Il racconto di questa serata sarà pubblicato a breve.',
+    gallery: 'GALLERY',
+    bookingIntro: 'Scrivici per portare un artista TeknoFavola nel tuo evento. Scegli un nome dall’indice per vedere la sua scheda.',
+    artistIndex: 'INDICE ARTISTI',
+    profileType: 'TIPO PROFILO',
+    creative: 'CREATIVO',
+    bio: 'BIOGRAFIA',
+    bioEmpty: 'Biografia in arrivo.',
+    social: 'SOCIAL',
+    djSetsEmpty: 'Nessun set pubblicato per ora.',
+    photoSlot: 'FOTO IN ARRIVO',
+    videoSlot: 'VIDEO IN ARRIVO',
+    workSlot: 'LAVORO',
+    bookingFormTitle: 'RICHIESTA BOOKING',
+    requiredNote: 'I campi contrassegnati con * sono obbligatori.',
+    send: 'INVIA',
+    sent: 'RICHIESTA INVIATA. TI RISPONDIAMO VIA EMAIL.',
+    status: 'STATO',
+    channels: 'CANALI',
+    futureStructure: 'COSA TROVERAI QUI',
+    role: 'TIPO PROFILO IN ARRIVO',
+    footerAbout: 'COLLETTIVO TEKNO · MESSINA / SICILIA',
+    footerContact: 'CONTATTI',
+    footerLegal: 'LEGALE',
+    footerCredit: 'P.IVA / DATI FISCALI — DA INSERIRE',
+    rights: 'TUTTI I DIRITTI RISERVATI',
+    artistsEmptyTitle: 'INDICE IN ARRIVO',
+    artistsEmptyBody: 'Le schede degli artisti saranno online a breve. Per il booking scrivici via email.',
+    notAvailable: 'NON DISPONIBILE',
+    open: 'APRI',
+    close: 'CHIUDI',
+    loading: 'CARICAMENTO CONTENUTI',
+    errorKicker: 'ERRORE',
+    errorTitle: 'CONTENUTI NON RAGGIUNGIBILI',
+    errorBody: 'Non riusciamo a caricare questa sezione. Riprova fra qualche istante: se il problema continua, scrivici via email.',
+    retry: 'RIPROVA'
+  },
+  en: {
+    collectiveTag: 'TEKNO COLLECTIVE',
+    menu: 'MENU',
+    langSwitch: 'Switch language',
+    tagline: 'WELCOME ♦ TO ♦ THE ♦ WORLD ♦ OF ♦ FABLES',
+    scroll: 'SCROLL',
+    bioKicker: 'ABOUT US',
+    bioText: 'A FABULOUS CREW',
+    bioParagraph: 'Space for the bio paragraph: who TeknoFavola is, how the collective started, what happens at one of our nights. Text to be provided.',
+    contactKicker: 'CONTACT US VIA',
+    socialTitle: 'SOCIAL',
+    socialsEmptyTitle: 'CHANNELS COMING',
+    pastEvents: 'PAST EVENTS',
+    upcomingEvents: 'UPCOMING EVENTS',
+    upcomingEmptyTitle: 'NO EVENT SCHEDULED',
+    upcomingEmptyBody: 'The next dates appear here as soon as they are announced. Meanwhile, browse the past events.',
+    pastEmptyTitle: 'ARCHIVE IN PROGRESS',
+    pastEmptyBody: 'Past events will be published shortly.',
+    favoleIntro: 'The fables we have told and the ones on the way: flyers, dates and the story of every night.',
+    flyerSlot: 'FLYER COMING',
+    openEvent: 'OPEN',
+    noDate: 'DATE COMING',
+    event: 'EVENT',
+    description: 'DESCRIPTION',
+    descEmpty: 'The story of this night will be published shortly.',
+    gallery: 'GALLERY',
+    bookingIntro: 'Write to us to bring a TeknoFavola artist to your event. Pick a name from the index to see their profile.',
+    artistIndex: 'ARTIST INDEX',
+    profileType: 'PROFILE TYPE',
+    creative: 'CREATIVE',
+    bio: 'BIOGRAPHY',
+    bioEmpty: 'Biography coming.',
+    social: 'SOCIAL',
+    djSetsEmpty: 'No set published yet.',
+    photoSlot: 'PHOTO COMING',
+    videoSlot: 'VIDEO COMING',
+    workSlot: 'WORK',
+    bookingFormTitle: 'BOOKING REQUEST',
+    requiredNote: 'Fields marked with * are required.',
+    send: 'SEND',
+    sent: 'REQUEST SENT. WE WILL REPLY BY EMAIL.',
+    status: 'STATUS',
+    channels: 'CHANNELS',
+    futureStructure: 'WHAT YOU WILL FIND HERE',
+    role: 'PROFILE TYPE COMING',
+    footerAbout: 'TEKNO COLLECTIVE · MESSINA / SICILY',
+    footerContact: 'CONTACT',
+    footerLegal: 'LEGAL',
+    footerCredit: 'VAT / LEGAL DETAILS — TO BE ADDED',
+    rights: 'ALL RIGHTS RESERVED',
+    artistsEmptyTitle: 'INDEX COMING',
+    artistsEmptyBody: 'Artist profiles will be online shortly. For booking, write to us by email.',
+    notAvailable: 'NOT AVAILABLE',
+    open: 'OPEN',
+    close: 'CLOSE',
+    loading: 'LOADING CONTENT',
+    errorKicker: 'ERROR',
+    errorTitle: 'CONTENT UNREACHABLE',
+    errorBody: 'We cannot load this section. Try again in a moment: if the problem persists, write to us by email.',
+    retry: 'RETRY'
+  }
+};
+
+const SOON = {
+  once: {
+    it: {
+      kicker: '03 / FORMAT VIDEO', titleA: 'ONCE UPON', titleB: 'A TIME',
+      intro: 'Il format non è ancora iniziato. Sarà una serie di set filmati, un episodio per artista.',
+      channels: ['INSTAGRAM', 'YOUTUBE'],
+      structureHint: 'Ogni episodio avrà titolo, numero, artista, genere e video integrale. Il più recente in alto.',
+      blocks: [
+        { tag: 'EPISODIO #01', title: 'IN PREPARAZIONE', body: 'Set filmato integrale, con la scheda dell’artista ospite.', foot: 'IN ARRIVO' },
+        { tag: 'EPISODIO #02', title: 'IN PREPARAZIONE', body: 'Un nuovo artista, un nuovo genere.', foot: 'IN ARRIVO' },
+        { tag: 'CANDIDATURE', title: 'REGISTRA IL TUO SET', body: 'Il format è aperto: manda la tua candidatura con il modulo qui sotto.', foot: 'APERTE' },
+        { tag: 'ARCHIVIO', title: 'TUTTI GLI EPISODI', body: 'Gli episodi pubblicati resteranno consultabili per numero e artista.', foot: 'IN ARRIVO' }
+      ],
+      formTitle: 'CANDIDATURA — REGISTRA IL TUO SET',
+      fields: ['NOME', 'EMAIL', 'ARTISTA', 'GENERE', 'LINK SOCIAL', 'LINK SET / DEMO', 'MESSAGGIO']
+    },
+    en: {
+      kicker: '03 / VIDEO FORMAT', titleA: 'ONCE UPON', titleB: 'A TIME',
+      intro: 'The format has not started yet. It will be a series of filmed sets, one episode per artist.',
+      channels: ['INSTAGRAM', 'YOUTUBE'],
+      structureHint: 'Every episode will carry a title, a number, the artist, the genre and the full video. Latest on top.',
+      blocks: [
+        { tag: 'EPISODE #01', title: 'IN PREPARATION', body: 'Full filmed set, with the guest artist’s profile.', foot: 'COMING' },
+        { tag: 'EPISODE #02', title: 'IN PREPARATION', body: 'A new artist, a new genre.', foot: 'COMING' },
+        { tag: 'APPLICATIONS', title: 'RECORD YOUR SET', body: 'The format is open: send your application with the form below.', foot: 'OPEN' },
+        { tag: 'ARCHIVE', title: 'EVERY EPISODE', body: 'Published episodes stay browsable by number and artist.', foot: 'COMING' }
+      ],
+      formTitle: 'APPLICATION — RECORD YOUR SET',
+      fields: ['NAME', 'EMAIL', 'ARTIST', 'GENRE', 'SOCIAL LINK', 'SET / DEMO LINK', 'MESSAGE']
+    }
+  },
+  label: {
+    it: {
+      kicker: '04 / LABEL', titleA: 'THE FABLE', titleB: 'LABEL',
+      intro: 'La label non è ancora attiva. Qui usciranno le release del collettivo e degli artisti ospiti.',
+      channels: ['INSTAGRAM', 'YOUTUBE', 'SPOTIFY', 'SOUNDCLOUD'],
+      structureHint: 'Ogni release avrà traccia, artista, mix e master engineer, cover, descrizione e link di ascolto.',
+      blocks: [
+        { tag: 'RELEASE 001', title: 'IN PREPARAZIONE', body: 'Prima uscita in lavorazione.', foot: 'IN ARRIVO' },
+        { tag: 'CATALOGO', title: 'TUTTE LE USCITE', body: 'Le release pubblicate resteranno consultabili per data e artista.', foot: 'IN ARRIVO' },
+        { tag: 'DEMO', title: 'MANDA LA TUA MUSICA', body: 'Le demo sono aperte: usa il modulo qui sotto.', foot: 'APERTE' },
+        { tag: 'ASCOLTO', title: 'SPOTIFY · SOUNDCLOUD · YOUTUBE', body: 'I canali di ascolto saranno collegati alla prima uscita.', foot: 'IN ARRIVO' }
+      ],
+      formTitle: 'INVIO DEMO',
+      fields: ['NOME ARTISTA', 'EMAIL', 'LINK DEMO', 'GENERE', 'SOCIAL', 'MESSAGGIO']
+    },
+    en: {
+      kicker: '04 / LABEL', titleA: 'THE FABLE', titleB: 'LABEL',
+      intro: 'The label is not active yet. Releases from the collective and guest artists will come out here.',
+      channels: ['INSTAGRAM', 'YOUTUBE', 'SPOTIFY', 'SOUNDCLOUD'],
+      structureHint: 'Every release will carry the track, the artist, mix and master engineer, cover, description and listening links.',
+      blocks: [
+        { tag: 'RELEASE 001', title: 'IN PREPARATION', body: 'First release in the works.', foot: 'COMING' },
+        { tag: 'CATALOGUE', title: 'EVERY RELEASE', body: 'Published releases stay browsable by date and artist.', foot: 'COMING' },
+        { tag: 'DEMOS', title: 'SEND YOUR MUSIC', body: 'Demos are open: use the form below.', foot: 'OPEN' },
+        { tag: 'LISTEN', title: 'SPOTIFY · SOUNDCLOUD · YOUTUBE', body: 'Listening channels will be linked with the first release.', foot: 'COMING' }
+      ],
+      formTitle: 'DEMO SUBMISSION',
+      fields: ['ARTIST NAME', 'EMAIL', 'DEMO LINK', 'GENRE', 'SOCIAL', 'MESSAGE']
+    }
+  },
+  studio: {
+    it: {
+      kicker: '05 / STUDIO', titleA: 'THE FABLE', titleB: 'STUDIO',
+      intro: 'Studio e sala prove non sono ancora operativi online. Per informazioni puoi già scriverci.',
+      channels: ['INSTAGRAM'],
+      structureHint: 'Produzione, registrazione, mix, master e ghost production, più la sala prove con la sua attrezzatura.',
+      blocks: [
+        { tag: 'SERVIZI', title: 'PRODUZIONI · REGISTRAZIONE · MIX · MASTER · GHOST PRODUCTION', body: 'Cinque servizi, richiedibili singolarmente.', foot: 'SU RICHIESTA' },
+        { tag: 'SALA PROVE', title: '2 × CDJ-3000X · XONE 96', body: 'Postazione completa per prove e registrazione di set.', foot: 'ATTREZZATURA' },
+        { tag: 'OPZIONALI', title: 'REGISTRAZIONE AUDIO SET · REGISTRAZIONE VIDEO SET · EDITING VIDEO', body: 'Servizi aggiuntivi da abbinare alla sala prove.', foot: 'SU RICHIESTA' },
+        { tag: 'PREZZI', title: 'SU MISURA', body: 'Il prezzo di ogni servizio varia a seconda della richiesta e della necessità dell’utente. Non esitare a contattarci per scoprire di più.', foot: 'CONTATTACI' }
+      ],
+      formTitle: 'RICHIESTA INFORMAZIONI / PRENOTAZIONE',
+      fields: ['NOME', 'EMAIL', 'TELEFONO', 'SERVIZIO RICHIESTO', 'DATA DESIDERATA', 'MESSAGGIO']
+    },
+    en: {
+      kicker: '05 / STUDIO', titleA: 'THE FABLE', titleB: 'STUDIO',
+      intro: 'Studio and rehearsal room are not online yet. You can already write to us for information.',
+      channels: ['INSTAGRAM'],
+      structureHint: 'Production, recording, mix, master and ghost production, plus the rehearsal room and its gear.',
+      blocks: [
+        { tag: 'SERVICES', title: 'PRODUCTION · RECORDING · MIX · MASTER · GHOST PRODUCTION', body: 'Five services, each available on its own.', foot: 'ON REQUEST' },
+        { tag: 'REHEARSAL ROOM', title: '2 × CDJ-3000X · XONE 96', body: 'A complete setup for rehearsing and recording sets.', foot: 'GEAR' },
+        { tag: 'OPTIONAL', title: 'AUDIO SET RECORDING · VIDEO SET RECORDING · VIDEO EDITING', body: 'Add-ons to combine with the rehearsal room.', foot: 'ON REQUEST' },
+        { tag: 'PRICING', title: 'TAILORED', body: 'The price of each service varies with the request and the needs of the client. Do not hesitate to contact us to find out more.', foot: 'CONTACT US' }
+      ],
+      formTitle: 'INFORMATION / BOOKING REQUEST',
+      fields: ['NAME', 'EMAIL', 'PHONE', 'REQUESTED SERVICE', 'PREFERRED DATE', 'MESSAGE']
+    }
+  }
+};
+
+const LONG_TITLE = 'LA FAVOLA INTERMINABILE DEL PURGATORIO DI MEZZA ESTATE CON WILLY WONKA E TUTTA LA CREW RIUNITA SOTTO L’ALBERO';
+
+function buildField(label, lang) {
+  const up = label.toUpperCase();
+  const it = lang === 'it';
+  const isMsg = up.indexOf('MESSAG') === 0 || up.indexOf('MESSAGE') === 0;
+  let type = 'text', auto = 'off';
+  if (up.indexOf('EMAIL') > -1) { type = 'email'; auto = 'email'; }
+  else if (up.indexOf('TELEFONO') > -1 || up.indexOf('PHONE') > -1) { type = 'tel'; auto = 'tel'; }
+  else if (up.indexOf('LINK') > -1 || up.indexOf('SOCIAL') > -1) { type = 'url'; auto = 'url'; }
+  else if (up.indexOf('DATA') === 0 || up.indexOf('PREFERRED DATE') > -1) { type = 'date'; }
+  else if (up === 'NOME' || up === 'NAME' || up.indexOf('NOME ARTISTA') === 0 || up.indexOf('ARTIST NAME') === 0) { auto = 'name'; }
+  const required = up === 'NOME' || up === 'NAME' || up.indexOf('EMAIL') > -1 || up.indexOf('NOME ARTISTA') === 0 || up.indexOf('ARTIST NAME') === 0;
+  return {
+    label: label + (required ? ' *' : ''),
+    name: up.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+    type, autocomplete: auto, required,
+    isTextarea: isMsg, isInput: !isMsg,
+    wrapStyle: 'display:flex;flex-direction:column;gap:7px' + (isMsg ? ';grid-column:1/-1' : '')
+  };
+}
+
+class Component extends DCLogic {
+  state = { page: 'home', lang: 'it', artist: 0, profile: 'dj', event: -1, menuOpen: false, sent: false, retryAt: 0 };
+
+  componentDidMount() {
+    document.documentElement.lang = this.state.lang;
+    this._onMove = (e) => {
+      const el = this.logo;
+      if (!el || window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+      const r = el.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2);
+      const dy = (e.clientY - (r.top + r.height / 2)) / (window.innerHeight / 2);
+      const near = Math.abs(dx) < 1.6 && Math.abs(dy) < 1.6;
+      el.style.transition = 'transform .18s linear';
+      el.style.transform = 'translate3d(' + (dx * 26).toFixed(2) + 'px,' + (dy * 18).toFixed(2) + 'px,0) rotate(' + (dx * 1.1).toFixed(2) + 'deg) scale(' + (near ? 1.02 : 1) + ')';
+    };
+    this._onLeave = () => {
+      if (this.logo) { this.logo.style.transition = 'transform .6s cubic-bezier(.2,.8,.2,1)'; this.logo.style.transform = 'none'; }
+    };
+    this._onKey = (e) => { if (e.key === 'Escape' && this.state.event >= 0) this.setState({ event: -1 }); };
+    window.addEventListener('mousemove', this._onMove, { passive: true });
+    window.addEventListener('mouseout', this._onLeave, { passive: true });
+    window.addEventListener('keydown', this._onKey);
+  }
+
+  componentDidUpdate(prev) {
+    if (prev && prev.lang !== this.state.lang) document.documentElement.lang = this.state.lang;
+    if (this.state.event >= 0 && this.closeBtn) this.closeBtn.focus();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mousemove', this._onMove);
+    window.removeEventListener('mouseout', this._onLeave);
+    window.removeEventListener('keydown', this._onKey);
+  }
+
+  go(page) {
+    this.setState({ page, event: -1, menuOpen: false, sent: false });
+    const side = document.getElementById('tf-side');
+    if (side) side.setAttribute('data-open', '0');
+    if (this.main) this.main.scrollTop = 0;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  dataset(lang) {
+    const mode = this.props.dataState || 'ready';
+    const t = COPY[lang];
+    if (mode === 'empty') return { past: [], roster: [], groups: [], djSets: [] };
+    if (mode === 'stress') {
+      const past = [];
+      for (let i = 0; i < 24; i++) past.push(i % 3 === 0 ? LONG_TITLE : PAST_EVENTS[i % PAST_EVENTS.length]);
+      const roster = [];
+      for (let i = 0; i < 36; i++) roster.push(i % 6 === 0 ? 'ANALØG23 · DØN CICCIØ B2B RICCARDO LENTINI' : ARTIST_ROSTER[i % ARTIST_ROSTER.length]);
+      const djSets = [];
+      for (let i = 0; i < 9; i++) djSets.push({ title: 'DJ SET #' + String(i + 1).padStart(2, '0'), state: t.videoSlot });
+      return { past, roster: roster.sort((a, b) => a.localeCompare(b, 'it')), groups: SOCIAL_GROUPS, djSets };
+    }
+    return {
+      past: PAST_EVENTS, roster: ARTIST_ROSTER, groups: SOCIAL_GROUPS,
+      djSets: [
+        { title: 'DJ SET #01', state: t.videoSlot },
+        { title: 'DJ SET #02', state: t.videoSlot },
+        { title: 'DJ SET #03', state: t.videoSlot }
+      ]
+    };
+  }
+
+  renderVals() {
+    const accent = this.props.accentColor || '#ff563c';
+    document.documentElement.style.setProperty('--tf-accent', accent);
+    const lang = this.state.lang;
+    const it = lang === 'it';
+    const t = COPY[lang];
+    const page = this.state.page;
+    const mode = this.props.dataState || 'ready';
+    const data = this.dataset(lang);
+    const stress = mode === 'stress';
+    const pill = 'font-size:11px;letter-spacing:.14em;padding:8px 13px;border:0;background:transparent;cursor:pointer;font-weight:800;';
+    const line2 = 'rgba(243,242,242,.2)';
+
+    const nav = NAV.map((n) => ({
+      label: n.label, num: n.num,
+      current: page === n.key ? 'page' : undefined,
+      go: () => this.go(n.key),
+      style: 'display:block;text-align:left;width:100%;border:0;border-bottom:1px solid ' + line2 + ';background:transparent;cursor:pointer;padding:15px 0;font-family:inherit;font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1;color:' + (page === n.key ? accent : '#f3f2f2')
+    }));
+
+    const socialGroups = data.groups.map((g, i) => ({
+      brand: g.brand,
+      num: String(i + 1).padStart(2, '0'),
+      links: g.links.map((l) => {
+        const has = !!l.url;
+        return {
+          platform: l.platform,
+          href: has ? l.url : undefined,
+          mark: has ? '↗' : '—',
+          srState: has ? t.open : t.notAvailable,
+          disabled: has ? undefined : 'true',
+          style: 'display:flex;align-items:center;gap:9px;padding:11px 14px;border:2px solid ' + (has ? accent : line2) + ';font-size:11px;letter-spacing:.14em;font-weight:800;text-decoration:none;color:' + (has ? accent : 'rgba(243,242,242,.64)') + ';' + (has ? '' : 'pointer-events:none;cursor:not-allowed;')
+        };
+      })
+    }));
+
+    const cardStyle = 'display:flex;flex-direction:column;gap:14px;text-align:left;padding:22px;border:0;border-right:2px solid rgba(243,242,242,.32);border-bottom:2px solid rgba(243,242,242,.32);background:transparent;color:#f3f2f2;font-family:inherit;cursor:pointer;min-width:0';
+    const events = data.past.map((title, i) => ({
+      title, num: 'FAVOLA ' + String(i + 1).padStart(2, '0'),
+      date: t.noDate,
+      dateStyle: 'color:' + accent + ';font-size:10px;letter-spacing:.16em',
+      open: () => this.setState({ event: i }),
+      cardStyle
+    }));
+
+    const artists = data.roster.map((name, i) => ({
+      name, num: String(i + 1).padStart(2, '0'),
+      current: this.state.artist === i ? 'true' : undefined,
+      select: () => this.setState({ artist: i }),
+      rowStyle: 'display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-bottom:1px solid ' + line2 + ';background:' + (this.state.artist === i ? '#151414' : 'transparent') + ';cursor:pointer;padding:14px 20px;font-family:inherit;color:' + (this.state.artist === i ? accent : '#f3f2f2')
+    }));
+
+    const isDj = this.state.profile === 'dj';
+    const soonKey = page === 'once' ? 'once' : page === 'label' ? 'label' : 'studio';
+    const soonRaw = SOON[soonKey][lang];
+    const artistIdx = Math.min(this.state.artist, Math.max(data.roster.length - 1, 0));
+    const dataOk = mode !== 'loading' && mode !== 'error';
+
+    return {
+      t, nav, socialGroups, events, artists,
+      mainRef: (el) => { this.main = el; },
+      logoRef: (el) => { this.logo = el; },
+      closeRef: (el) => { this.closeBtn = el; },
+      goHome: () => this.go('home'),
+      toggleLang: () => this.setState({ lang: it ? 'en' : 'it' }),
+      menuExpanded: this.state.menuOpen ? 'true' : 'false',
+      toggleMenu: () => {
+        const open = !this.state.menuOpen;
+        const side = document.getElementById('tf-side');
+        if (side) side.setAttribute('data-open', open ? '1' : '0');
+        this.setState({ menuOpen: open });
+      },
+      itStyle: pill + 'background:' + (it ? accent : 'transparent') + ';color:' + (it ? '#0b0b0b' : '#f3f2f2'),
+      enStyle: pill + 'background:' + (!it ? accent : 'transparent') + ';color:' + (!it ? '#0b0b0b' : '#f3f2f2'),
+      isLoading: mode === 'loading',
+      isError: mode === 'error',
+      retry: () => this.setState({ retryAt: Date.now() }),
+      skeletonCards: [1, 2, 3, 4, 5, 6],
+      isHome: dataOk && page === 'home',
+      isFavole: dataOk && page === 'favole',
+      isBooking: dataOk && page === 'booking',
+      isSoon: dataOk && (page === 'once' || page === 'label' || page === 'studio'),
+      noSocials: data.groups.length === 0,
+      soon: Object.assign({}, soonRaw, { fields: soonRaw.fields.map((f) => buildField(f, lang)) }),
+      upcoming: [],
+      noUpcoming: true,
+      upcomingCount: '0',
+      pastCount: String(data.past.length),
+      noPast: data.past.length === 0,
+      noArtists: data.roster.length === 0,
+      artistCount: data.roster.length + ' · A–Z',
+      activeArtist: {
+        name: data.roster.length ? data.roster[artistIdx] : '—',
+        roleLabel: isDj ? 'DJ' : t.creative,
+        bio: stress
+          ? 'TeknoFavola nasce a Messina come collettivo di artisti legati alla musica elettronica: dj, fotografi, videomaker, grafici e tatuatrici che costruiscono ogni serata come un racconto. Questa biografia lunga serve a verificare che il testo respiri anche quando l’artista consegna dieci righe invece di due, senza spingere fuori griglia le colonne accanto né rompere il ritmo verticale della pagina.'
+          : t.bioEmpty,
+        slots: isDj
+          ? [t.photoSlot, t.videoSlot]
+          : [t.workSlot + ' 01', t.workSlot + ' 02', t.workSlot + ' 03']
+      },
+      isDjProfile: isDj,
+      djPressed: isDj ? 'true' : 'false',
+      creativePressed: !isDj ? 'true' : 'false',
+      setDj: () => this.setState({ profile: 'dj' }),
+      setCreative: () => this.setState({ profile: 'creative' }),
+      djTabStyle: pill + 'background:' + (isDj ? accent : 'transparent') + ';color:' + (isDj ? '#0b0b0b' : '#f3f2f2'),
+      creativeTabStyle: pill + 'background:' + (!isDj ? accent : 'transparent') + ';color:' + (!isDj ? '#0b0b0b' : '#f3f2f2'),
+      artistSocialSlots: ['INSTAGRAM · —', 'SOUNDCLOUD · —', 'SPOTIFY · —'],
+      djSets: data.djSets,
+      noDjSets: data.djSets.length === 0,
+      bookingFields: (it
+        ? ['NOME', 'EMAIL', 'TELEFONO', 'ARTISTA INTERESSATO', 'MESSAGGIO']
+        : ['NAME', 'EMAIL', 'PHONE', 'ARTIST OF INTEREST', 'MESSAGE']).map((f) => buildField(f, lang)),
+      submitForm: (e) => { e.preventDefault(); this.setState({ sent: true }); },
+      sentMessage: this.state.sent ? t.sent : '',
+      sentStyle: 'display:' + (this.state.sent ? 'block' : 'none') + ';margin-top:14px;font-size:11px;letter-spacing:.14em;font-weight:800;color:' + accent,
+      footerRights: '© ' + new Date().getFullYear() + ' TEKNOFAVOLA — ' + t.rights,
+      footerSocials: data.groups.flatMap((g) => g.links.filter((l) => l.url).map((l) => ({
+        label: l.platform + ' · ' + g.brand + ' ↗',
+        href: l.url,
+        style: 'font-size:11px;letter-spacing:.12em;font-weight:800;color:' + accent + ';text-decoration:none;overflow-wrap:anywhere'
+      }))),
+      eventOpen: this.state.event >= 0,
+      closeEvent: () => this.setState({ event: -1 }),
+      activeEvent: this.state.event >= 0 && data.past[this.state.event]
+        ? {
+            title: data.past[this.state.event],
+            num: 'FAVOLA ' + String(this.state.event + 1).padStart(2, '0'),
+            description: stress
+              ? 'Una notte costruita come una favola: tre stanze, sei artisti, un impianto tarato per la tekno e un racconto visivo curato dai fotografi e dai videomaker del collettivo. Questo testo lungo verifica che la colonna del pannello resti leggibile e che l’intestazione non si spezzi quando la descrizione dell’evento arriva davvero completa dal pannello.'
+              : t.descEmpty
+          }
+        : { title: '', num: '', description: '' },
+      eventMeta: [
+        { label: it ? 'DATA' : 'DATE', value: '—' },
+        { label: 'INSTAGRAM', value: '—' },
+        { label: 'YOUTUBE', value: '—' },
+        { label: it ? 'LUOGO' : 'VENUE', value: '—' }
+      ],
+      gallerySlots: [1, 2, 3, 4, 5, 6]
+    };
+  }
+}
+</script>
+</body>
+</html>

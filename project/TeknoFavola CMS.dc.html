@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800;900&display=swap">
+<link rel="stylesheet" href="_ds/modernist-ccfe7c28-1729-44c5-b50f-a059607df958/styles.css">
+<script src="_ds/modernist-ccfe7c28-1729-44c5-b50f-a059607df958/_ds_bundle.js"></script>
+<style>
+html,body{margin:0;padding:0;background:#f3f2f2;color:#201e1d;font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#ec3013;text-decoration:none}
+a:hover{color:#b7240e}
+::selection{background:#ec3013;color:#f3f2f2}
+:focus-visible{outline:2px solid #ec3013;outline-offset:2px}
+@media (max-width:900px){
+  #cms-shell{flex-direction:column!important}
+  #cms-side{width:100%!important;height:auto!important;position:static!important;border-right:0!important;border-bottom:2px solid #201e1d!important}
+  #cms-cols{flex-direction:row!important;flex-wrap:wrap!important}
+  .cms-2col{grid-template-columns:1fr!important}
+}
+</style>
+</helmet>
+<div id="cms-shell" style="display:flex;min-height:100vh;background:#f3f2f2">
+
+  <aside id="cms-side" style="width:270px;flex:none;border-right:2px solid #201e1d;position:sticky;top:0;height:100vh;overflow:auto;background:#eae9e9;display:flex;flex-direction:column">
+    <div style="padding:18px 20px;border-bottom:2px solid #201e1d;display:flex;flex-direction:column;gap:4px">
+      <span style="font-weight:900;font-size:14px;letter-spacing:-0.01em">DIRECTUS</span>
+      <span style="font-size:10px;letter-spacing:.16em;color:rgba(32,30,29,.7)">admin.teknofavola.it</span>
+    </div>
+    <div style="padding:14px 20px 10px;font-size:9px;letter-spacing:.2em;color:rgba(32,30,29,.7)">{{ t.content }}</div>
+    <nav id="cms-cols" style="display:flex;flex-direction:column">
+      <sc-for list="{{ collections }}" as="c" hint-placeholder-count="10">
+        <button onClick="{{ c.go }}" style="{{ c.style }}" style-hover="background:#dcdbdb">
+          <span style="flex:1;min-width:0;text-align:left">{{ c.label }}</span>
+          <span style="{{ c.badgeStyle }}">{{ c.count }}</span>
+        </button>
+      </sc-for>
+    </nav>
+    <div style="margin-top:auto;padding:16px 20px;border-top:2px solid #201e1d;display:flex;flex-direction:column;gap:8px">
+      <span style="font-size:9px;letter-spacing:.2em;color:rgba(32,30,29,.7)">{{ t.role }}</span>
+      <span style="font-weight:800;font-size:12px">ADMIN TEKNOFAVOLA</span>
+      <span style="font-size:10px;line-height:1.6;color:rgba(32,30,29,.7)">{{ t.roleNote }}</span>
+    </div>
+  </aside>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+    <header style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px clamp(18px,3vw,34px);border-bottom:2px solid #201e1d;background:#f3f2f2;position:sticky;top:0;z-index:5">
+      <div style="display:flex;flex-direction:column;gap:3px;min-width:0;flex:1">
+        <span style="font-size:9px;letter-spacing:.2em;color:rgba(32,30,29,.7)">{{ view.breadcrumb }}</span>
+        <h1 style="margin:0;font-size:clamp(19px,2.4vw,28px);letter-spacing:-0.025em">{{ view.title }}</h1>
+      </div>
+      <button onClick="{{ toggleLang }}" style="display:flex;border:2px solid #201e1d;background:transparent;padding:0;cursor:pointer">
+        <span style="{{ itStyle }}">IT</span>
+        <span style="{{ enStyle }}">EN</span>
+      </button>
+      <button style="display:flex;align-items:center;gap:9px;background:#ec3013;color:#f3f2f2;border:0;padding:12px 16px;font-family:inherit;font-weight:800;font-size:12px;letter-spacing:.02em;cursor:pointer;text-align:left" style-hover="background:#b7240e">{{ view.action }}</button>
+    </header>
+
+    <div style="padding:clamp(18px,3vw,34px);display:flex;flex-direction:column;gap:26px">
+
+      <p style="margin:0;font-size:13px;line-height:1.7;max-width:76ch;color:rgba(32,30,29,.7)">{{ view.intro }}</p>
+
+      <sc-if value="{{ view.isList }}" hint-placeholder-val="{{ true }}">
+        <div style="border:2px solid #201e1d;background:#f3f2f2;overflow:auto">
+          <div style="{{ view.rowStyle }}">
+            <sc-for list="{{ view.columns }}" as="col" hint-placeholder-count="5">
+              <span style="font-size:9px;letter-spacing:.18em;color:rgba(32,30,29,.7)">{{ col }}</span>
+            </sc-for>
+          </div>
+          <sc-for list="{{ view.rows }}" as="r" hint-placeholder-count="7">
+            <div style="{{ r.style }}" style-hover="background:#eae9e9">
+              <sc-for list="{{ r.cells }}" as="cell" hint-placeholder-count="5">
+                <span style="{{ cell.style }}">{{ cell.value }}</span>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <span style="font-size:11px;line-height:1.7;color:rgba(32,30,29,.7);max-width:76ch">{{ view.listNote }}</span>
+      </sc-if>
+
+      <sc-if value="{{ view.isForm }}" hint-placeholder-val="{{ false }}">
+        <div class="cms-2col" style="display:grid;grid-template-columns:1.35fr .9fr;gap:26px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:0;border:2px solid #201e1d;background:#f3f2f2">
+            <div style="padding:14px 18px;border-bottom:2px solid #201e1d;font-size:9px;letter-spacing:.2em;color:rgba(32,30,29,.7)">{{ view.formLabel }}</div>
+            <sc-for list="{{ view.fields }}" as="f" hint-placeholder-count="8">
+              <label style="display:flex;flex-direction:column;gap:7px;padding:16px 18px;border-bottom:1px solid rgba(32,30,29,.16)">
+                <span style="display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.18em;color:rgba(32,30,29,.7)">
+                  <span>{{ f.label }}</span>
+                  <span style="{{ f.tagStyle }}">{{ f.tag }}</span>
+                </span>
+                <span style="{{ f.controlStyle }}">{{ f.value }}</span>
+                <span style="font-size:10px;line-height:1.6;color:rgba(32,30,29,.7)">{{ f.hint }}</span>
+              </label>
+            </sc-for>
+            <div style="display:flex;flex-wrap:wrap;gap:2px;padding:16px 18px">
+              <button style="display:flex;align-items:center;gap:8px;background:#ec3013;color:#f3f2f2;border:0;padding:12px 16px;font-family:inherit;font-weight:800;font-size:12px;cursor:pointer;text-align:left" style-hover="background:#b7240e">{{ t.save }}</button>
+              <button style="background:transparent;color:#201e1d;border:2px solid #201e1d;padding:12px 16px;font-family:inherit;font-weight:800;font-size:12px;cursor:pointer;text-align:left" style-hover="background:#eae9e9">{{ t.draft }}</button>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="border:2px solid #201e1d;background:#eae9e9;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <span style="font-size:9px;letter-spacing:.2em;color:#ec3013">{{ view.asideLabel }}</span>
+              <sc-for list="{{ view.aside }}" as="a" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:5px;padding-bottom:12px;border-bottom:1px solid rgba(32,30,29,.16)">
+                  <span style="font-weight:800;font-size:12px;letter-spacing:.01em">{{ a.title }}</span>
+                  <span style="font-size:11px;line-height:1.65;color:rgba(32,30,29,.7)">{{ a.body }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="border:2px solid #201e1d;background:#f3f2f2;padding:18px;display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:9px;letter-spacing:.2em;color:rgba(32,30,29,.7)">{{ t.frontendResult }}</span>
+              <span style="font-size:12px;line-height:1.7;color:rgba(32,30,29,.7)">{{ view.frontendNote }}</span>
+              <span style="font-size:10px;letter-spacing:.14em;color:#ec3013">{{ view.frontendRoute }}</span>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ view.isGuide }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:0;border-top:2px solid #201e1d">
+          <sc-for list="{{ guide }}" as="ch" hint-placeholder-count="7">
+            <section class="cms-2col" style="display:grid;grid-template-columns:.55fr 1.45fr;gap:20px 34px;align-items:start;padding:26px 0;border-bottom:2px solid #201e1d">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:9px;letter-spacing:.2em;color:#ec3013">{{ ch.num }}</span>
+                <h2 style="margin:0;font-size:clamp(18px,2.2vw,26px);letter-spacing:-0.025em;line-height:1.1">{{ ch.title }}</h2>
+                <span style="font-size:11px;line-height:1.65;color:rgba(32,30,29,.7)">{{ ch.lead }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                <sc-for list="{{ ch.rows }}" as="r" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:minmax(150px,.5fr) 1.5fr;gap:8px 20px;padding:13px 16px;border:2px solid rgba(32,30,29,.18)">
+                    <span style="font-weight:800;font-size:12px;letter-spacing:.02em">{{ r.k }}</span>
+                    <span style="font-size:12px;line-height:1.65;color:rgba(32,30,29,.68)">{{ r.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </section>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+const COLLECTIONS = [
+  { key: 'guide', it: 'GUIDA AL SISTEMA', en: 'SYSTEM GUIDE', count: '↗' },
+  { key: 'site_settings', it: 'IMPOSTAZIONI SITO', en: 'SITE SETTINGS', count: '1' },
+  { key: 'events', it: 'EVENTI', en: 'EVENTS', count: '7' },
+  { key: 'artists', it: 'ARTISTI', en: 'ARTISTS', count: '12' },
+  { key: 'dj_sets', it: 'DJ SET', en: 'DJ SETS', count: '0' },
+  { key: 'releases', it: 'RELEASE', en: 'RELEASES', count: '0' },
+  { key: 'services', it: 'SERVIZI STUDIO', en: 'STUDIO SERVICES', count: '5' },
+  { key: 'studio_info', it: 'INFO STUDIO / SALA PROVE', en: 'STUDIO / REHEARSAL INFO', count: '1' },
+  { key: 'social_links', it: 'SOCIAL', en: 'SOCIAL LINKS', count: '8' },
+  { key: 'form_submissions', it: 'RICHIESTE RICEVUTE', en: 'SUBMISSIONS', count: '0' },
+  { key: 'media', it: 'MEDIA', en: 'MEDIA', count: '3' }
+];
+
+const EVENT_ROWS = [
+  'LA FAVOLA DI MEZZA ESTATE',
+  "A MESSINA NON C'È NENTI",
+  'LA DIVINA TEKNO DI OKUTO',
+  'SICILY TEKNO UNITED',
+  'LA FAVOLA DEL PURGATORIO',
+  "SOTTO L'ALBERO DELLE FAVOLE",
+  'CHE FINE HA FATTO WILLY WONKA'
+];
+
+const ARTIST_ROWS = [
+  ['ALO', 'DJ'], ['ANALØG23', 'DJ'], ['CYNNAMIDE', 'DJ'], ['DØN CICCIØ', 'DJ'],
+  ['FABIANA MIRODDI', '—'], ['FEFOX', 'DJ'], ['FLOW.D', 'DJ'], ['JASON', 'DJ'],
+  ['KEVIN MAZZARELLO', '—'], ['RICCARDO LENTINI', 'DJ'], ['RJJCK', 'DJ'], ['VERTEK', 'DJ']
+];
+
+const SOCIAL_ROWS = [
+  ['TEKNOFAVOLA', 'INSTAGRAM', 'instagram.com/teknofavola', 1],
+  ['ONCE UPON A TIME', 'INSTAGRAM', '', 0],
+  ['ONCE UPON A TIME', 'YOUTUBE', '', 0],
+  ['THE FABLE LABEL', 'INSTAGRAM', '', 0],
+  ['THE FABLE LABEL', 'YOUTUBE', '', 0],
+  ['THE FABLE LABEL', 'SPOTIFY', '', 0],
+  ['THE FABLE LABEL', 'SOUNDCLOUD', '', 0],
+  ['THE FABLE STUDIO', 'INSTAGRAM', '', 0]
+];
+
+const COPY = {
+  it: {
+    content: 'CONTENUTI', role: 'RUOLO', save: 'SALVA E PUBBLICA', draft: 'SALVA COME BOZZA',
+    roleNote: 'Permessi limitati ai contenuti: nessun accesso a schema, utenti o impostazioni tecniche.',
+    frontendResult: 'COSA CAMBIA SUL SITO'
+  },
+  en: {
+    content: 'CONTENT', role: 'ROLE', save: 'SAVE AND PUBLISH', draft: 'SAVE AS DRAFT',
+    roleNote: 'Permissions limited to content: no access to schema, users or technical settings.',
+    frontendResult: 'WHAT CHANGES ON THE SITE'
+  }
+};
+
+const GUIDE = {
+  it: [
+    { num: 'CAPITOLO 01', title: 'COME È FATTO IL SISTEMA', lead: 'Tre pezzi separati che parlano fra loro.',
+      rows: [
+        { k: 'SITO', v: 'SvelteKit + TypeScript. Costruisce le pagine leggendo i contenuti da Directus tramite API. Non contiene testi, foto o link: solo struttura e layout.' },
+        { k: 'CMS', v: 'Directus, su admin.teknofavola.it. È questo pannello: qui si creano, modificano ed eliminano i contenuti.' },
+        { k: 'DATABASE', v: 'PostgreSQL. Conserva tutti i record delle collection elencate nella colonna a sinistra.' },
+        { k: 'MEDIA', v: 'Storage collegato a Directus: ogni immagine caricata qui viene ridimensionata e servita al sito nel formato più leggero.' }
+      ] },
+    { num: 'CAPITOLO 02', title: 'DALLA MODIFICA ALLA PUBBLICAZIONE', lead: 'Il percorso di un contenuto, passo per passo.',
+      rows: [
+        { k: '1 · APRI', v: 'Scegli la collection nella colonna a sinistra, per esempio EVENTI.' },
+        { k: '2 · CREA', v: 'Premi il pulsante rosso in alto a destra: + NUOVO EVENTO, + NUOVO ARTISTA, + NUOVO DJ SET.' },
+        { k: '3 · COMPILA', v: 'Riempi i campi. Quelli segnati OBBLIGATORIO non permettono il salvataggio se restano vuoti.' },
+        { k: '4 · PUBBLICA', v: 'SALVA E PUBBLICA rende il contenuto visibile online. SALVA COME BOZZA lo conserva senza mostrarlo.' },
+        { k: '5 · VERIFICA', v: 'Apri la pagina corrispondente del sito: il contenuto è già presente.' }
+      ] },
+    { num: 'CAPITOLO 03', title: 'LE COLLECTION E A COSA SERVONO', lead: 'Ogni voce della colonna sinistra alimenta una parte precisa del sito.',
+      rows: [
+        { k: 'SITE_SETTINGS', v: 'Logo, catchphrase, bio, email, copyright, SEO. Alimenta home, footer e anteprime social.' },
+        { k: 'EVENTS', v: 'Le nostre favole: prossimi eventi ed eventi passati, divisi in automatico in base alla data.' },
+        { k: 'ARTISTS', v: 'Booking artist: una scheda per artista, con tipo di profilo, foto, bio, social e video.' },
+        { k: 'DJ_SETS', v: 'I set collegati a un artista. Alimentano la scheda artista e il format Once Upon a Time.' },
+        { k: 'RELEASES', v: 'The Fable Label: traccia, artista, mix engineer, master engineer, cover, link streaming.' },
+        { k: 'SERVICES · STUDIO_INFO', v: 'The Fable Studio: servizi, attrezzatura della sala prove, servizi opzionali, nota sui prezzi.' },
+        { k: 'SOCIAL_LINKS', v: 'I social di ogni format, raggruppati dal sito per TeknoFavola, Once Upon a Time, Label e Studio.' },
+        { k: 'FORM_SUBMISSIONS', v: 'Le richieste ricevute dai form: booking, candidature, demo, prenotazioni studio. Sola lettura.' },
+        { k: 'MEDIA', v: 'Libreria immagini divisa per cartelle: logo, flyer, foto artisti, foto lavori, cover, gallery.' }
+      ] },
+    { num: 'CAPITOLO 04', title: 'LE RELAZIONI FRA CONTENUTI', lead: 'Alcuni contenuti puntano ad altri invece di ripetere gli stessi dati.',
+      rows: [
+        { k: 'ARTISTA → DJ SET', v: 'Un artista può avere un numero illimitato di DJ set. Nel form del DJ set si seleziona l’artista da un menu: nome, foto, bio e social arrivano dalla sua scheda.' },
+        { k: 'ARTISTA → RELEASE', v: 'Stessa logica per le release della label: si collega l’artista.' },
+        { k: 'EVENTO → MEDIA', v: 'Flyer e gallery sono file della libreria media, riutilizzabili in più contenuti.' },
+        { k: 'CONSEGUENZA', v: 'Correggere un nome o sostituire una foto in una sola scheda aggiorna ogni punto del sito in cui compare.' }
+      ] },
+    { num: 'CAPITOLO 05', title: 'LE PAGINE DEL SITO', lead: 'Come ogni pagina prende i suoi contenuti.',
+      rows: [
+        { k: '/', v: 'Logo, catchphrase, bio, email, social raggruppati per format, footer.' },
+        { k: '/favole', v: 'Griglia dei flyer: prossimi eventi in alto, eventi passati sotto.' },
+        { k: '/favole/[slug]', v: 'Scheda evento: flyer, data, descrizione, link, gallery.' },
+        { k: '/booking', v: 'Email in evidenza, indice artisti in ordine alfabetico, scheda dell’artista, form di booking.' },
+        { k: '/booking/[slug]', v: 'Pagina dedicata all’artista: /booking/riccardo-lentini.' },
+        { k: '/once-upon-a-time', v: 'Format video: episodi numerati, dal più recente. Mostra COMING SOON finché non ci sono episodi pubblicati.' },
+        { k: '/label · /studio', v: 'Bio, release o servizi, form dedicato. Mostrano COMING SOON finché le collection sono vuote.' }
+      ] },
+    { num: 'CAPITOLO 06', title: 'IMMAGINI E VIDEO', lead: 'Regole pratiche per un sito veloce.',
+      rows: [
+        { k: 'FLYER', v: 'Formato verticale, lato lungo almeno 1200 px. Il sistema genera da sé le versioni più piccole.' },
+        { k: 'FOTO ARTISTA', v: 'Una foto principale per artista; per i profili non-DJ, tre immagini dei lavori.' },
+        { k: 'VIDEO', v: 'Si incolla il link YouTube o Vimeo: i video non vengono caricati sul sito, così le pagine restano leggere.' },
+        { k: 'CAMPI NON ANCORA DISPONIBILI', v: 'Un link o un’immagine che ancora non esiste si lascia vuoto: il sito lo segnala come non disponibile.' }
+      ] },
+    { num: 'CAPITOLO 07', title: 'ACCESSI E SICUREZZA', lead: 'Chi entra, cosa può fare.',
+      rows: [
+        { k: 'ACCOUNT', v: 'Ogni persona ha il proprio accesso a admin.teknofavola.it, con password personale.' },
+        { k: 'RUOLO ADMIN TEKNOFAVOLA', v: 'Gestisce tutti i contenuti e i media; non modifica lo schema dei dati né le impostazioni tecniche.' },
+        { k: 'FORM DEL SITO', v: 'Le richieste dei visitatori arrivano in RICHIESTE RICEVUTE e via email, con protezione antispam.' },
+        { k: 'BACKUP', v: 'Database e media vengono salvati automaticamente: un contenuto eliminato per errore è recuperabile.' }
+      ] },
+    { num: 'CAPITOLO 08', title: 'CRESCITA FUTURA', lead: 'Cosa si può aggiungere senza rifare il sito.',
+      rows: [
+        { k: 'NUOVI FORMAT', v: 'Un nuovo format si aggiunge come record in SOCIAL_LINKS e, se serve una pagina, come nuova collection.' },
+        { k: 'NUOVE SEZIONI', v: 'Merch, ticketing, newsletter, podcast e press kit si innestano sulla stessa struttura.' },
+        { k: 'ARTISTI E RELEASE', v: 'Nessun limite di numero: l’indice e gli ordinamenti si ricalcolano da soli.' }
+      ] }
+  ],
+  en: [
+    { num: 'CHAPTER 01', title: 'HOW THE SYSTEM IS BUILT', lead: 'Three separate parts talking to each other.',
+      rows: [
+        { k: 'SITE', v: 'SvelteKit + TypeScript. It builds the pages by reading content from Directus over the API. It holds no text, photos or links: structure and layout only.' },
+        { k: 'CMS', v: 'Directus, at admin.teknofavola.it. This panel: content is created, edited and deleted here.' },
+        { k: 'DATABASE', v: 'PostgreSQL. It stores every record of the collections listed in the left column.' },
+        { k: 'MEDIA', v: 'Storage connected to Directus: every image uploaded here is resized and served in the lightest format.' }
+      ] },
+    { num: 'CHAPTER 02', title: 'FROM EDIT TO PUBLICATION', lead: 'A piece of content, step by step.',
+      rows: [
+        { k: '1 · OPEN', v: 'Pick the collection in the left column, EVENTS for instance.' },
+        { k: '2 · CREATE', v: 'Press the red button at the top right: + NEW EVENT, + NEW ARTIST, + NEW DJ SET.' },
+        { k: '3 · FILL IN', v: 'Complete the fields. Those marked REQUIRED block saving while empty.' },
+        { k: '4 · PUBLISH', v: 'SAVE AND PUBLISH makes the content visible online. SAVE AS DRAFT keeps it without showing it.' },
+        { k: '5 · CHECK', v: 'Open the matching page on the site: the content is already there.' }
+      ] },
+    { num: 'CHAPTER 03', title: 'THE COLLECTIONS AND WHAT THEY FEED', lead: 'Every entry in the left column feeds a specific part of the site.',
+      rows: [
+        { k: 'SITE_SETTINGS', v: 'Logo, catchphrase, bio, email, copyright, SEO. Feeds home, footer and social previews.' },
+        { k: 'EVENTS', v: 'Le nostre favole: upcoming and past events, split automatically by date.' },
+        { k: 'ARTISTS', v: 'Booking artist: one record per artist, with profile type, photo, bio, socials and video.' },
+        { k: 'DJ_SETS', v: 'Sets linked to an artist. They feed the artist profile and the Once Upon a Time format.' },
+        { k: 'RELEASES', v: 'The Fable Label: track, artist, mix engineer, master engineer, cover, streaming links.' },
+        { k: 'SERVICES · STUDIO_INFO', v: 'The Fable Studio: services, rehearsal-room gear, optional services, pricing note.' },
+        { k: 'SOCIAL_LINKS', v: 'The socials of each format, grouped by the site under TeknoFavola, Once Upon a Time, Label and Studio.' },
+        { k: 'FORM_SUBMISSIONS', v: 'Requests received from the forms: booking, applications, demos, studio bookings. Read only.' },
+        { k: 'MEDIA', v: 'Image library split into folders: logo, flyers, artist photos, work photos, covers, gallery.' }
+      ] },
+    { num: 'CHAPTER 04', title: 'HOW CONTENT IS LINKED', lead: 'Some records point to others instead of repeating the same data.',
+      rows: [
+        { k: 'ARTIST → DJ SET', v: 'An artist can have any number of DJ sets. In the DJ set form the artist is picked from a menu: name, photo, bio and socials come from their record.' },
+        { k: 'ARTIST → RELEASE', v: 'Same logic for label releases: the artist is linked.' },
+        { k: 'EVENT → MEDIA', v: 'Flyers and galleries are files in the media library, reusable across records.' },
+        { k: 'RESULT', v: 'Fixing a name or replacing a photo in one record updates every place on the site where it appears.' }
+      ] },
+    { num: 'CHAPTER 05', title: 'THE PAGES OF THE SITE', lead: 'Where each page takes its content from.',
+      rows: [
+        { k: '/', v: 'Logo, catchphrase, bio, email, socials grouped by format, footer.' },
+        { k: '/favole', v: 'Flyer grid: upcoming events on top, past events below.' },
+        { k: '/favole/[slug]', v: 'Event record: flyer, date, description, links, gallery.' },
+        { k: '/booking', v: 'Email up front, alphabetical artist index, artist profile, booking form.' },
+        { k: '/booking/[slug]', v: 'Dedicated artist page: /booking/riccardo-lentini.' },
+        { k: '/once-upon-a-time', v: 'Video format: numbered episodes, latest first. Shows COMING SOON while no episode is published.' },
+        { k: '/label · /studio', v: 'Bio, releases or services, dedicated form. They show COMING SOON while the collections are empty.' }
+      ] },
+    { num: 'CHAPTER 06', title: 'IMAGES AND VIDEO', lead: 'Practical rules for a fast site.',
+      rows: [
+        { k: 'FLYERS', v: 'Portrait format, long side at least 1200 px. The system generates the smaller versions itself.' },
+        { k: 'ARTIST PHOTOS', v: 'One main photo per artist; for non-DJ profiles, three images of their work.' },
+        { k: 'VIDEO', v: 'Paste the YouTube or Vimeo link: videos are not uploaded to the site, so pages stay light.' },
+        { k: 'FIELDS NOT YET AVAILABLE', v: 'A link or image that does not exist yet is left empty: the site marks it as unavailable.' }
+      ] },
+    { num: 'CHAPTER 07', title: 'ACCESS AND SECURITY', lead: 'Who logs in, what they can do.',
+      rows: [
+        { k: 'ACCOUNTS', v: 'Each person has their own login to admin.teknofavola.it with a personal password.' },
+        { k: 'ADMIN TEKNOFAVOLA ROLE', v: 'Manages all content and media; does not change the data schema or technical settings.' },
+        { k: 'SITE FORMS', v: 'Visitor requests land in SUBMISSIONS and by email, with spam protection.' },
+        { k: 'BACKUP', v: 'Database and media are backed up automatically: content deleted by mistake can be restored.' }
+      ] },
+    { num: 'CHAPTER 08', title: 'FUTURE GROWTH', lead: 'What can be added without rebuilding the site.',
+      rows: [
+        { k: 'NEW FORMATS', v: 'A new format is added as a record in SOCIAL_LINKS and, if it needs a page, as a new collection.' },
+        { k: 'NEW SECTIONS', v: 'Merch, ticketing, newsletter, podcast and press kit graft onto the same structure.' },
+        { k: 'ARTISTS AND RELEASES', v: 'No limit on numbers: the index and the ordering recompute themselves.' }
+      ] }
+  ]
+};
+
+function pill(active) {
+  return 'font-size:11px;letter-spacing:.14em;font-weight:800;padding:7px 12px;border:0;cursor:pointer;font-family:inherit;background:' + (active ? '#ec3013' : 'transparent') + ';color:' + (active ? '#f3f2f2' : '#201e1d');
+}
+
+class Component extends DCLogic {
+  state = { view: 'events', lang: 'it' };
+
+  view(lang) {
+    const it = lang === 'it';
+    const v = this.state.view;
+    const grid = (cols) => 'display:grid;grid-template-columns:' + cols + ';gap:14px;align-items:center;padding:13px 16px;min-width:640px;';
+    const head = (cols) => grid(cols) + 'border-bottom:2px solid #201e1d;background:#eae9e9;';
+    const row = (cols) => grid(cols) + 'border-bottom:1px solid rgba(32,30,29,.16);cursor:pointer;';
+    const strong = 'font-weight:800;font-size:13px;letter-spacing:-0.005em';
+    const dim = 'font-size:11px;color:rgba(32,30,29,.7);letter-spacing:.04em';
+    const stateOn = 'font-size:10px;letter-spacing:.14em;font-weight:800;color:#ec3013';
+    const stateOff = 'font-size:10px;letter-spacing:.14em;color:rgba(32,30,29,.7)';
+
+    if (v === 'guide') {
+      return {
+        isList: false, isForm: false, isGuide: true,
+        breadcrumb: it ? 'DOCUMENTAZIONE' : 'DOCUMENTATION',
+        title: it ? 'GUIDA AL SISTEMA' : 'SYSTEM GUIDE',
+        action: it ? 'SCARICA PDF' : 'DOWNLOAD PDF',
+        intro: it
+          ? 'Come è costruito il sito TeknoFavola, come è organizzato questo pannello e come si aggiorna ogni parte delle pagine.'
+          : 'How the TeknoFavola site is built, how this panel is organised and how every part of the pages is updated.'
+      };
+    }
+
+    if (v === 'events') {
+      const cols = '2.2fr 1fr 1fr .9fr .8fr';
+      return {
+        isList: true, isForm: false,
+        breadcrumb: 'CONTENUTI / EVENTS', title: it ? 'EVENTI' : 'EVENTS',
+        action: it ? '+ NUOVO EVENTO' : '+ NEW EVENT',
+        intro: it
+          ? 'La lista degli eventi. Premi + NUOVO EVENTO per aggiungerne uno: titolo, flyer, data, descrizione e link. Salvato e pubblicato, compare subito in LE NOSTRE FAVOLE, ordinato per data.'
+          : 'The event list. Press + NEW EVENT to add one: title, flyer, date, description and links. Once saved and published it shows up in LE NOSTRE FAVOLE, sorted by date.',
+        columns: [it ? 'TITOLO' : 'TITLE', it ? 'DATA' : 'DATE', 'FLYER', it ? 'STATO' : 'STATUS', it ? 'IN EVIDENZA' : 'FEATURED'],
+        rowStyle: head(cols),
+        rows: EVENT_ROWS.map((title) => ({
+          style: row(cols),
+          cells: [
+            { value: title, style: strong },
+            { value: it ? '— DA INSERIRE' : '— TO BE SET', style: dim },
+            { value: it ? '— DA CARICARE' : '— TO UPLOAD', style: dim },
+            { value: it ? 'PUBBLICATO' : 'PUBLISHED', style: stateOn },
+            { value: 'NO', style: stateOff }
+          ]
+        })),
+        listNote: it
+          ? 'Le 7 favole sono già caricate come record: mancano solo date, flyer e descrizioni, che il cliente inserisce quando le ha. Cancellare un record lo fa sparire dal sito.'
+          : 'The 7 fables are already loaded as records: only dates, flyers and descriptions are missing, to be filled in when available. Deleting a record removes it from the site.'
+      };
+    }
+
+    if (v === 'artists') {
+      const cols = '2fr 1.1fr 1fr .9fr .7fr';
+      return {
+        isList: true, isForm: false,
+        breadcrumb: 'CONTENUTI / ARTISTS', title: it ? 'ARTISTI' : 'ARTISTS',
+        action: it ? '+ NUOVO ARTISTA' : '+ NEW ARTIST',
+        intro: it
+          ? 'Un record per artista. Il tipo di profilo decide cosa mostra il sito: i DJ hanno foto, video, bio e DJ set; fotografi, videomaker, grafici e tatuatrici hanno mansione e 3 lavori.'
+          : 'One record per artist. The profile type decides what the site shows: DJs get photo, video, bio and DJ sets; photographers, videomakers, designers and tattoo artists get a role and 3 works.',
+        columns: [it ? 'NOME' : 'NAME', it ? 'TIPO PROFILO' : 'PROFILE TYPE', it ? 'FOTO' : 'PHOTO', it ? 'STATO' : 'STATUS', 'DJ SET'],
+        rowStyle: head(cols),
+        rows: ARTIST_ROWS.map((a) => ({
+          style: row(cols),
+          cells: [
+            { value: a[0], style: strong },
+            { value: a[1] === 'DJ' ? 'DJ' : (it ? '— DA DEFINIRE' : '— TO BE SET'), style: a[1] === 'DJ' ? dim : stateOff },
+            { value: it ? '— DA CARICARE' : '— TO UPLOAD', style: dim },
+            { value: it ? 'PUBBLICATO' : 'PUBLISHED', style: stateOn },
+            { value: '0', style: stateOff }
+          ]
+        })),
+        listNote: it
+          ? 'I 12 artisti sono caricati in ordine alfabetico. Il tipo di profilo dei non-DJ va confermato dal cliente: nessun dato è stato inventato.'
+          : 'The 12 artists are loaded alphabetically. The profile type for non-DJs needs the client’s confirmation: nothing was invented.'
+      };
+    }
+
+    if (v === 'social_links') {
+      const cols = '1.4fr 1fr 1.6fr .8fr .7fr';
+      return {
+        isList: true, isForm: false,
+        breadcrumb: 'CONTENUTI / SOCIAL_LINKS', title: it ? 'SOCIAL' : 'SOCIAL LINKS',
+        action: it ? '+ NUOVO SOCIAL' : '+ NEW SOCIAL',
+        intro: it
+          ? 'Ogni social appartiene a un format. Il sito li raggruppa da solo: TEKNOFAVOLA, ONCE UPON A TIME, THE FABLE LABEL, THE FABLE STUDIO. Un URL vuoto resta segnato come non disponibile.'
+          : 'Each social belongs to a format. The site groups them on its own: TEKNOFAVOLA, ONCE UPON A TIME, THE FABLE LABEL, THE FABLE STUDIO. An empty URL stays marked as unavailable.',
+        columns: ['FORMAT', it ? 'PIATTAFORMA' : 'PLATFORM', 'URL', it ? 'ORDINE' : 'ORDER', it ? 'ATTIVO' : 'ACTIVE'],
+        rowStyle: head(cols),
+        rows: SOCIAL_ROWS.map((s, i) => ({
+          style: row(cols),
+          cells: [
+            { value: s[0], style: strong },
+            { value: s[1], style: dim },
+            { value: s[2] || (it ? '— VUOTO, DA INSERIRE' : '— EMPTY, TO BE ADDED'), style: s[2] ? dim : stateOff },
+            { value: String(i + 1), style: dim },
+            { value: s[3] ? (it ? 'SÌ' : 'YES') : 'NO', style: s[3] ? stateOn : stateOff }
+          ]
+        })),
+        listNote: it
+          ? 'Aggiungere un nuovo format o una nuova piattaforma non richiede codice: basta un record in più.'
+          : 'Adding a new format or platform needs no code: just one more record.'
+      };
+    }
+
+    if (v === 'dj_sets') {
+      return {
+        isList: false, isForm: true,
+        breadcrumb: 'CONTENUTI / DJ_SETS / ' + (it ? 'NUOVO' : 'NEW'),
+        title: it ? 'NUOVO DJ SET' : 'NEW DJ SET',
+        action: it ? '+ NUOVO DJ SET' : '+ NEW DJ SET',
+        intro: it
+          ? 'Il form più importante del pannello: si sceglie l’artista da un menu e il sistema collega automaticamente nome, foto, bio e social. Nessun dato da riscrivere.'
+          : 'The most important form in the panel: pick the artist from a menu and the system links name, photo, bio and socials automatically. Nothing to retype.',
+        formLabel: it ? 'CAMPI DEL DJ SET' : 'DJ SET FIELDS',
+        fields: [
+          { label: it ? 'ARTISTA' : 'ARTIST', tag: it ? 'RELAZIONE' : 'RELATION', tagOn: true, value: 'RICCARDO LENTINI  ▼', hint: it ? 'Menu a tendina sulla collection artists.' : 'Dropdown on the artists collection.' },
+          { label: it ? 'TITOLO' : 'TITLE', tag: it ? 'OBBLIGATORIO' : 'REQUIRED', tagOn: true, value: 'DJ SET #01', hint: it ? 'Il numero episodio si compila da solo se lo lasci vuoto.' : 'The episode number autofills if left empty.' },
+          { label: it ? 'VIDEO (YOUTUBE / VIMEO)' : 'VIDEO (YOUTUBE / VIMEO)', tag: it ? 'OPZIONALE' : 'OPTIONAL', tagOn: false, value: it ? 'incolla qui il link' : 'paste the link here', hint: it ? 'Se vuoto, il set non mostra player e non compare come video.' : 'If empty, the set shows no player and is not listed as a video.' },
+          { label: it ? 'GENERE' : 'GENRE', tag: it ? 'OPZIONALE' : 'OPTIONAL', tagOn: false, value: '—', hint: it ? 'Usato nel titolo del format Once Upon a Time.' : 'Used in the Once Upon a Time title format.' },
+          { label: it ? 'ORDINE' : 'ORDER', tag: 'SORT_ORDER', tagOn: false, value: '1', hint: it ? 'Si trascina nella lista: il sito segue.' : 'Drag it in the list: the site follows.' },
+          { label: it ? 'STATO' : 'STATUS', tag: it ? 'PUBBLICAZIONE' : 'PUBLISHING', tagOn: true, value: it ? 'BOZZA  /  PUBBLICATO' : 'DRAFT  /  PUBLISHED', hint: it ? 'In bozza non è visibile online.' : 'A draft is not visible online.' }
+        ],
+        asideLabel: it ? 'RECUPERATO DALL’ARTISTA' : 'PULLED FROM THE ARTIST',
+        aside: [
+          { title: 'RICCARDO LENTINI', body: it ? 'Nome preso dal record artista: se cambia lì, cambia in tutti i suoi set.' : 'Name taken from the artist record: change it there and every set follows.' },
+          { title: it ? 'FOTO ARTISTA' : 'ARTIST PHOTO', body: it ? 'Non si ricarica per ogni set: viene dalla scheda artista.' : 'Not re-uploaded per set: it comes from the artist record.' },
+          { title: it ? 'BIO E SOCIAL' : 'BIO AND SOCIALS', body: it ? 'Un artista può avere infiniti DJ set senza duplicare una riga di testo.' : 'An artist can have any number of DJ sets with no duplicated text.' }
+        ],
+        frontendNote: it
+          ? 'Il set compare nella scheda dell’artista in BOOKING ARTIST e, se appartiene al format, nella pagina ONCE UPON A TIME.'
+          : 'The set appears on the artist profile in BOOKING ARTIST and, if it belongs to the format, on the ONCE UPON A TIME page.',
+        frontendRoute: '/booking/riccardo-lentini · /once-upon-a-time/01-riccardo-lentini'
+      };
+    }
+
+    if (v === 'site_settings') {
+      return {
+        isList: false, isForm: true,
+        breadcrumb: 'CONTENUTI / SITE_SETTINGS',
+        title: it ? 'IMPOSTAZIONI SITO' : 'SITE SETTINGS',
+        action: it ? 'SALVA' : 'SAVE',
+        intro: it
+          ? 'Il record unico che alimenta home, footer e SEO. Qui si cambia il logo, la catchphrase, la bio e l’email senza toccare il codice.'
+          : 'The single record feeding home, footer and SEO. Logo, catchphrase, bio and email are changed here with no code involved.',
+        formLabel: it ? 'CAMPI GLOBALI' : 'GLOBAL FIELDS',
+        fields: [
+          { label: 'LOGO', tag: 'MEDIA', tagOn: true, value: 'logo-tf.png', hint: it ? 'Sostituendo il file cambia il logo in home, sidebar e footer.' : 'Replacing the file changes the logo in home, sidebar and footer.' },
+          { label: it ? 'CATCHPHRASE' : 'CATCHPHRASE', tag: 'TEXT', tagOn: false, value: 'BENVENUTI ♦ NEL ♦ MONDO ♦ DELLE ♦ FAVOLE', hint: it ? 'La riga sotto il logo in home.' : 'The line under the logo on the home page.' },
+          { label: it ? 'BIO TEKNOFAVOLA' : 'TEKNOFAVOLA BIO', tag: it ? 'DA COMPILARE' : 'TO BE FILLED', tagOn: true, value: it ? '— testo non ancora fornito —' : '— text not supplied yet —', hint: it ? 'Testo grande della home. Ora è un placeholder dichiarato.' : 'The large home text. Currently a declared placeholder.' },
+          { label: 'EMAIL', tag: 'MAILTO', tagOn: false, value: 'teknofavola@gmail.com', hint: it ? 'Usata in home, booking e in tutte le pagine coming soon.' : 'Used on home, booking and every coming-soon page.' },
+          { label: it ? 'COPYRIGHT / DATI LEGALI' : 'COPYRIGHT / LEGAL', tag: 'FOOTER', tagOn: false, value: it ? '© TEKNOFAVOLA — P.IVA da inserire' : '© TEKNOFAVOLA — VAT to be added', hint: it ? 'Riga legale del footer.' : 'The footer legal line.' },
+          { label: 'SEO TITLE / DESCRIPTION / FAVICON', tag: 'SEO', tagOn: false, value: it ? '— da compilare —' : '— to be filled —', hint: it ? 'Meta tag, Open Graph e card social.' : 'Meta tags, Open Graph and social cards.' }
+        ],
+        asideLabel: it ? 'DOVE FINISCE' : 'WHERE IT LANDS',
+        aside: [
+          { title: it ? 'HOME' : 'HOME', body: it ? 'Logo, catchphrase, bio, email.' : 'Logo, catchphrase, bio, email.' },
+          { title: 'FOOTER', body: it ? 'Logo piccolo, email, copyright, dati legali.' : 'Small logo, email, copyright, legal details.' },
+          { title: 'SEO', body: it ? 'Title, description, favicon, anteprime social.' : 'Title, description, favicon, social previews.' }
+        ],
+        frontendNote: it ? 'Un solo record: nessun testo globale è scritto nel codice del sito.' : 'One single record: no global text lives in the site code.',
+        frontendRoute: '/ · footer ' + (it ? 'di ogni pagina' : 'on every page')
+      };
+    }
+
+    const map = {
+      releases: [it ? 'RELEASE' : 'RELEASES', it ? 'Nome traccia, artista, mix engineer, master engineer, cover, descrizione, link streaming, data, ordine, stato.' : 'Track name, artist, mix engineer, master engineer, cover, description, streaming links, date, order, status.'],
+      services: [it ? 'SERVIZI STUDIO' : 'STUDIO SERVICES', it ? 'PRODUZIONI, REGISTRAZIONE, MIX, MASTER, GHOST PRODUCTION: già caricati, riordinabili, disattivabili.' : 'PRODUCTION, RECORDING, MIX, MASTER, GHOST PRODUCTION: already loaded, reorderable, switchable.'],
+      studio_info: [it ? 'INFO STUDIO / SALA PROVE' : 'STUDIO / REHEARSAL INFO', it ? 'Attrezzatura (2 × CDJ-3000X, XONE 96), servizi opzionali e testo sui prezzi.' : 'Gear (2 × CDJ-3000X, XONE 96), optional services and the pricing note.'],
+      form_submissions: [it ? 'RICHIESTE RICEVUTE' : 'SUBMISSIONS', it ? 'Booking, candidature Once Upon a Time, demo della label, richieste studio: tutto in una casella, in sola lettura.' : 'Booking, Once Upon a Time applications, label demos, studio requests: all in one read-only inbox.'],
+      media: [it ? 'MEDIA' : 'MEDIA', it ? 'Cartelle: logo, flyer, foto artisti, foto lavori, cover release, gallery. Le immagini vengono ottimizzate al caricamento.' : 'Folders: logo, flyers, artist photos, work photos, release covers, gallery. Images are optimised on upload.']
+    };
+    const m = map[v] || map.media;
+    return {
+      isList: true, isForm: false,
+      breadcrumb: 'CONTENUTI / ' + v.toUpperCase(),
+      title: m[0],
+      action: it ? '+ NUOVO RECORD' : '+ NEW RECORD',
+      intro: m[1],
+      columns: [it ? 'CONTENUTO' : 'CONTENT', it ? 'STATO' : 'STATUS'],
+      rowStyle: head('2fr .8fr'),
+      rows: [{ style: row('2fr .8fr'), cells: [
+        { value: it ? 'Nessun record: la collection è pronta e vuota.' : 'No records: the collection is ready and empty.', style: 'font-size:12px;color:rgba(32,30,29,.7)' },
+        { value: it ? 'VUOTA' : 'EMPTY', style: stateOff }
+      ] }],
+      listNote: it
+        ? 'La struttura esiste già: quando il cliente avrà i contenuti, li inserisce qui e la pagina corrispondente smette di mostrare COMING SOON senza interventi di sviluppo.'
+        : 'The structure already exists: once the client has content, they enter it here and the matching page stops showing COMING SOON with no development work.'
+    };
+  }
+
+  renderVals() {
+    const lang = this.state.lang;
+    const it = lang === 'it';
+    const t = COPY[lang];
+    const raw = this.view(lang);
+    const view = Object.assign({}, raw, {
+      fields: (raw.fields || []).map((f) => ({
+        label: f.label, tag: f.tag, hint: f.hint, value: f.value,
+        tagStyle: 'font-size:8px;letter-spacing:.16em;padding:3px 6px;border:2px solid ' + (f.tagOn ? '#ec3013' : 'rgba(32,30,29,.25)') + ';color:' + (f.tagOn ? '#ec3013' : 'rgba(32,30,29,.5)'),
+        controlStyle: 'display:block;border:2px solid rgba(32,30,29,.25);background:#fff;padding:11px 12px;font-weight:700;font-size:13px;color:rgba(32,30,29,.85)'
+      }))
+    });
+
+    return {
+      t, view,
+      guide: GUIDE[lang],
+      collections: COLLECTIONS.map((c) => ({
+        label: it ? c.it : c.en,
+        count: c.count,
+        go: () => { this.setState({ view: c.key }); window.scrollTo({ top: 0, behavior: 'smooth' }); },
+        style: 'display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;border-bottom:1px solid rgba(32,30,29,.16);cursor:pointer;padding:13px 20px;font-family:inherit;font-weight:800;font-size:12px;letter-spacing:.02em;background:' + (this.state.view === c.key ? '#f3f2f2' : 'transparent') + ';color:' + (this.state.view === c.key ? '#ec3013' : '#201e1d'),
+        badgeStyle: 'font-size:10px;letter-spacing:.1em;color:' + (c.count === '0' ? 'rgba(32,30,29,.35)' : 'rgba(32,30,29,.6)')
+      })),
+      toggleLang: () => this.setState({ lang: it ? 'en' : 'it' }),
+      itStyle: pill(it),
+      enStyle: pill(!it)
+    };
+  }
+}
+</script>
+</body>
+</html>
