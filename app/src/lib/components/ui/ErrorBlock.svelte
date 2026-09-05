@@ -5,7 +5,7 @@
 </script>
 
 <div role="alert" style="padding:clamp(28px,5vw,72px) clamp(24px,5vw,80px) 70px;display:flex;flex-direction:column;gap:20px;align-items:flex-start">
-	<span style="font-size:10px;letter-spacing:.28em;color:var(--tf-accent)">{t(lang, 'errorKicker')}</span>
+	<span class="tf-kicker">{t(lang, 'errorKicker')}</span>
 	<h1 style="margin:0;font-size:clamp(28px,5.4vw,72px);line-height:.96;letter-spacing:-0.04em;max-width:24ch">{t(lang, 'errorTitle')}</h1>
 	<p style="margin:0;font-size:14px;line-height:1.7;max-width:56ch;color:var(--tf-ink-2)">{t(lang, 'errorBody')}</p>
 	<div style="display:flex;flex-wrap:wrap;gap:2px">

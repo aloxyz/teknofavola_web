@@ -23,8 +23,8 @@
 							href={l.url}
 							target="_blank"
 							rel="noopener"
-							class="tf-sociallink"
-							style="display:flex;align-items:center;gap:9px;padding:11px 14px;border:2px solid var(--tf-accent);font-size:11px;letter-spacing:.14em;font-weight:800;color:var(--tf-accent)"
+							class="tf-pill-link"
+							style="display:flex;align-items:center;gap:9px;padding:11px 14px;border-color:var(--tf-accent);font-size:11px;letter-spacing:.14em;color:var(--tf-accent)"
 						>
 							<span>{l.platform}</span><span aria-hidden="true" style="opacity:.85">↗</span>
 						</a>
@@ -48,9 +48,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.tf-sociallink:hover {
-		background: var(--tf-bg-3) !important;
-	}
-</style>

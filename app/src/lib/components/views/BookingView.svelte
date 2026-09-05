@@ -29,7 +29,7 @@
 {:else}
 	<div>
 		<header style="padding:clamp(36px,6vw,80px) clamp(24px,5vw,80px) 34px;border-bottom:2px solid var(--tf-line)">
-			<span style="display:block;font-size:10px;letter-spacing:.28em;color:var(--tf-accent);margin-bottom:16px">{t(lang, 'bookingKicker')}</span>
+			<span class="tf-kicker" style="display:block;margin-bottom:16px">{t(lang, 'bookingKicker')}</span>
 			<h1 style="margin:0;font-size:clamp(20px,6.6vw,72px);line-height:.95;letter-spacing:-0.045em">
 				<a href="mailto:{contactEmail}" class="tf-bigmail" style="display:block;max-width:100%;font-weight:900;color:var(--tf-ink);word-break:break-word">{contactEmail}</a>
 			</h1>

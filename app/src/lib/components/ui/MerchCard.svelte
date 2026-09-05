@@ -27,15 +27,9 @@
 	<button
 		type="button"
 		onclick={onRequest}
-		class="tf-merchlink"
-		style="margin-top:auto;border:2px solid var(--tf-accent);background:transparent;color:var(--tf-accent);padding:8px 12px;font-size:10px;letter-spacing:.14em;font-weight:800;align-self:flex-start;cursor:pointer"
+		class="tf-pill-link"
+		style="margin-top:auto;border-color:var(--tf-accent);background:transparent;color:var(--tf-accent);padding:8px 12px;font-size:10px;letter-spacing:.14em;align-self:flex-start;cursor:pointer"
 	>
 		{t(lang, 'request')} →
 	</button>
 </div>
-
-<style>
-	.tf-merchlink:hover {
-		background: var(--tf-bg-3) !important;
-	}
-</style>

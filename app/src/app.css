@@ -72,6 +72,35 @@ textarea::placeholder {
 	outline-offset: 2px;
 }
 
+/* Shared fragments for the small handful of inline-style patterns that
+   repeat verbatim across components (eyebrow labels, sub-section headings,
+   accent pill links, and the event/episode card hover). Callers keep their
+   own padding/font-size/margin inline where those already varied — these
+   classes only carry the properties that were already identical everywhere. */
+.tf-kicker {
+	font-size: 10px;
+	letter-spacing: 0.28em;
+	color: var(--tf-accent);
+}
+.tf-subheading {
+	letter-spacing: 0.2em;
+	color: var(--tf-ink-3);
+	font-weight: 800;
+}
+.tf-pill-link {
+	display: inline-block;
+	border: 2px solid;
+	font-weight: 800;
+	text-decoration: none;
+}
+.tf-pill-link:hover {
+	background: var(--tf-bg-3);
+}
+.tf-media-card:hover {
+	background: var(--tf-bg-3);
+	color: var(--tf-ink);
+}
+
 .tf-sr {
 	position: absolute;
 	width: 1px;
