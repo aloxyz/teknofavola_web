@@ -16,7 +16,9 @@
 	}: { lang: Locale; artist: ArtistRecord; djSets: DjSetRecord[]; djSetsError: boolean } = $props();
 
 	const isDj = $derived(artist.profile_type === 'dj');
-	const roleLabel = $derived(artist.profile_type ? PROFILE_TYPE_LABEL[artist.profile_type][lang] : t(lang, 'notAvailable'));
+	const roleLabel = $derived(
+		artist.profile_type ? (PROFILE_TYPE_LABEL[artist.profile_type]?.[lang] ?? artist.profile_type) : t(lang, 'notAvailable')
+	);
 	const bio = $derived(pickLocalized(artist, 'bio', lang) ?? t(lang, 'bioEmpty'));
 	const photoSrc = $derived(assetUrl(artist.photo, 'width=700&quality=85'));
 	const workPhotos = $derived((artist.work_photos ?? []).slice(0, 3).map((w) => assetUrl(w.file, 'width=700&quality=85')));

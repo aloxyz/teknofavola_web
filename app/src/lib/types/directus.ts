@@ -1,6 +1,6 @@
 export type Status = 'draft' | 'published' | 'archived';
 
-export type ProfileType = 'dj' | 'photographer' | 'videomaker' | 'graphic' | 'tattoo_artist' | 'other';
+export type ProfileType = 'dj' | 'photographer_videomaker' | 'graphic' | 'tattoo_artist' | 'other';
 
 export type SocialFormat = 'teknofavola' | 'once_upon_a_time' | 'fable_label' | 'fable_studio';
 

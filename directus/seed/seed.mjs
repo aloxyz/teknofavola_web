@@ -107,7 +107,8 @@ const EVENTS = [
 ];
 
 const ARTISTS = [
-  { name: 'RICCARDO LENTINI', profile_type: 'dj' },
+  { name: 'RICCARDO LENTINI', profile_type: 'photographer_videomaker' },
+  { name: 'FEDERICO VINCI', profile_type: 'photographer_videomaker' },
   { name: 'KEVIN MAZZARELLO', profile_type: null },
   { name: 'FABIANA MIRODDI', profile_type: null },
   { name: 'ALO', profile_type: 'dj' },

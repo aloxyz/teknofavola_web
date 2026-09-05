@@ -235,7 +235,7 @@ function stringListRepeater(field, opts = {}) {
   };
 }
 
-export const PROFILE_TYPES = ['dj', 'photographer', 'videomaker', 'graphic', 'tattoo_artist', 'other'];
+export const PROFILE_TYPES = ['dj', 'photographer_videomaker', 'graphic', 'tattoo_artist', 'other'];
 export const SOCIAL_FORMATS = ['teknofavola', 'once_upon_a_time', 'fable_label', 'fable_studio'];
 export const SUBMISSION_TYPES = ['booking', 'once_upon_a_time', 'label_demo', 'studio_request', 'merch_interest'];
 
@@ -316,7 +316,7 @@ export const collections = [
   {
     collection: 'artists',
     icon: 'groups',
-    note: 'Booking Artist roster — DJs, photographers, videomakers, graphic artists, tattoo artists.',
+    note: 'Booking Artist roster — DJs, photographer/videomakers, graphic artists, tattoo artists.',
     sortField: 'sort_order',
     statusField: true,
     fields: [
