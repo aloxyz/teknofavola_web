@@ -37,6 +37,12 @@ services:
       CORS_ENABLED: "true"
       CORS_ORIGIN: https://${DOMAIN}
       WEBSOCKETS_ENABLED: "false"
+      # Behind Caddy, every request otherwise looks like it comes from the
+      # caddy container — trust its X-Forwarded-For so rate limiting and
+      # activity logs see the real visitor IP. Directus 11 defaults this to
+      # true already; set explicitly so it survives an eventual v12 upgrade
+      # (which flips the default to false).
+      IP_TRUST_PROXY: "true"
       # Rate-limit Directus's own login/API to slow down brute-force + abuse.
       RATE_LIMITER_ENABLED: "true"
       RATE_LIMITER_POINTS: "50"
@@ -63,6 +69,12 @@ services:
       FORM_RATE_LIMIT_MAX: ${FORM_RATE_LIMIT_MAX:-5}
       FORM_RATE_LIMIT_WINDOW_MS: ${FORM_RATE_LIMIT_WINDOW_MS:-600000}
       FORM_IP_SALT: "${FORM_IP_SALT:?generate one with openssl rand -hex 32}"
+      # Without these, adapter-node reports every request's IP as Caddy's own
+      # container address — the form rate limiter would then throttle every
+      # visitor as a single shared "IP" instead of catching an actual abuser.
+      # There's exactly one proxy hop (Caddy) in front of this app.
+      ADDRESS_HEADER: X-Forwarded-For
+      XFF_DEPTH: "1"
     ports:
       # Same as Directus above — debugging only, public route is Caddy.
       - "127.0.0.1:3000:3000"
