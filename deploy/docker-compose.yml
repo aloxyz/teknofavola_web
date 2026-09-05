@@ -55,14 +55,13 @@ services:
       RATE_LIMITER_ENABLED: "true"
       RATE_LIMITER_POINTS: "50"
       RATE_LIMITER_DURATION: "1"
-      # Directus refuses to generate ANY thumbnail/resized version (admin
-      # panel preview included) for a source image wider or taller than this
-      # — default 6000px. Modern cameras/phones routinely shoot larger
-      # (e.g. 7008px), so a real upload can silently have no preview
-      # anywhere on the site or in the panel. Raised, not removed: still
-      # guards against a truly oversized file exhausting memory on a small
-      # VPS during transformation.
-      ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION: "10000"
+      # No default in Directus (unlimited) otherwise — a camera-original
+      # photo can be 30-80MB, which also breaks its own thumbnail generation
+      # (see ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION's default 6000px limit).
+      # 50mb leaves headroom for a legitimate short hero background video
+      # while rejecting that kind of oversized photo outright, with a clear
+      # error at upload time instead of a silently-missing thumbnail later.
+      FILES_MAX_UPLOAD_SIZE: "50mb"
     volumes:
       - directus-uploads:/directus/uploads
       - directus-extensions:/directus/extensions
