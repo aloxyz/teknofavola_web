@@ -287,8 +287,29 @@ export const collections = [
       text('venue', { note: 'Optional venue / city.' }),
       fileRepeater('gallery', { note: 'Optional photo gallery for the event drawer.' }),
       boolean('featured', { note: 'Highlight this event above the others.' }),
+      {
+        field: 'djs',
+        type: 'alias',
+        meta: {
+          interface: 'list-m2m',
+          special: ['m2m'],
+          note: 'Artists who played this night. Shown as links to their booking profile.',
+          width: 'full'
+        },
+        schema: null
+      },
       SORT_FIELD(),
       STATUS_FIELD
+    ]
+  },
+
+  {
+    collection: 'events_artists',
+    icon: 'link',
+    note: 'Junction: which artists played which event. Managed from the event screen, not directly.',
+    fields: [
+      m2o('event', 'events', { required: true, oneField: 'djs' }),
+      m2o('artist', 'artists', { required: true, template: '{{ name }}' })
     ]
   },
 

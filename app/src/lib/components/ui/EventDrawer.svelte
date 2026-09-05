@@ -4,7 +4,7 @@
 	import { assetUrl } from '$lib/utils/assets';
 	import { formatEventDate } from '$lib/utils/date';
 	import { pickLocalized } from '$lib/utils/localized';
-	import type { EventRecord } from '$lib/types/directus';
+	import type { ArtistRecord, EventRecord } from '$lib/types/directus';
 
 	let {
 		event,
@@ -31,6 +31,11 @@
 		(event.gallery ?? [])
 			.map((g) => assetUrl(g.file, 'width=500&quality=80'))
 			.filter((src): src is string => !!src)
+	);
+	const djs = $derived(
+		(event.djs ?? [])
+			.map((d) => (typeof d.artist === 'string' ? null : (d.artist as ArtistRecord)))
+			.filter((a): a is ArtistRecord => !!a)
 	);
 
 	const meta = $derived([
@@ -82,6 +87,16 @@
 			<h3 style="margin:0 0 10px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'description')}</h3>
 			<p style="margin:0;font-size:14px;line-height:1.7;color:var(--tf-ink-2)">{description}</p>
 		</div>
+		{#if djs.length}
+			<div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px">
+				<h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'lineup')}</h3>
+				<div style="display:flex;flex-wrap:wrap;gap:2px">
+					{#each djs as artist (artist.slug)}
+						<a href="/booking/{artist.slug}" class="tf-eventdj" style="border:2px solid var(--tf-accent);color:var(--tf-accent);padding:9px 14px;font-size:11px;letter-spacing:.1em;font-weight:800">{artist.name}</a>
+					{/each}
+				</div>
+			</div>
+		{/if}
 		{#if gallery.length}
 			<div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px;padding-bottom:40px">
 				<h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'gallery')}</h3>
@@ -99,5 +114,8 @@
 	.tf-drawer-close:hover {
 		border-color: var(--tf-accent) !important;
 		color: var(--tf-accent) !important;
+	}
+	.tf-eventdj:hover {
+		background: var(--tf-bg-3);
 	}
 </style>
