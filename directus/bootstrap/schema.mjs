@@ -133,7 +133,12 @@ function m2o(field, relatedCollection, opts = {}) {
       display_options: { template: opts.template }
     },
     schema: { is_nullable: !opts.required },
-    relation: { related_collection: relatedCollection, one_field: opts.oneField }
+    // junctionField is only needed when this m2o is one leg of an m2m
+    // junction row (oneField set): Directus's list-m2m interface uses it to
+    // find the sibling foreign-key field on the same junction collection —
+    // without it the field errors with "relationship is not configured
+    // properly" in the app, even though plain API reads still work fine.
+    relation: { related_collection: relatedCollection, one_field: opts.oneField, junction_field: opts.junctionField }
   };
 }
 
@@ -311,7 +316,7 @@ export const collections = [
     icon: 'link',
     note: 'Junction: which artists played which event. Managed from the event screen, not directly.',
     fields: [
-      m2o('event', 'events', { required: true, oneField: 'djs' }),
+      m2o('event', 'events', { required: true, oneField: 'djs', junctionField: 'artist' }),
       m2o('artist', 'artists', { required: true, template: '{{ name }}' })
     ]
   },

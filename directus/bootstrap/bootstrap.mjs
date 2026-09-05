@@ -122,11 +122,14 @@ async function ensureFields(def) {
 
     if (field.relation) {
       console.log(`    + relation ${def.collection}.${field.field} -> ${field.relation.related_collection}`);
+      const meta = {};
+      if (field.relation.one_field) meta.one_field = field.relation.one_field;
+      if (field.relation.junction_field) meta.junction_field = field.relation.junction_field;
       await api('POST', '/relations', {
         collection: def.collection,
         field: field.field,
         related_collection: field.relation.related_collection,
-        meta: field.relation.one_field ? { one_field: field.relation.one_field } : undefined
+        meta: Object.keys(meta).length ? meta : undefined
       });
     }
   }
