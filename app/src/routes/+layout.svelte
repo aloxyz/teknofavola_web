@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import type { Snippet } from 'svelte';
+	import { page } from '$app/stores';
 	import SideNav from '$lib/components/layout/SideNav.svelte';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import { pickLocalized } from '$lib/utils/localized';
@@ -9,7 +10,18 @@
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
-	const title = $derived(pickLocalized(data.siteSettings, 'seo_title', data.lang) ?? data.siteSettings.site_name);
+	// Single source of truth for <title>: pages that need a specific one (an
+	// artist's booking profile, an event) expose it via their own load data
+	// instead of rendering their own <svelte:head><title> — Svelte doesn't
+	// reliably clear a page-level title when navigating to a page that has
+	// none, so it used to stick around across unrelated routes.
+	const routeData = $derived($page.data as { activeArtist?: { name: string }; openEvent?: { title: string } });
+	const defaultTitle = $derived(pickLocalized(data.siteSettings, 'seo_title', data.lang) ?? data.siteSettings.site_name);
+	const title = $derived(
+		routeData.activeArtist ? `${routeData.activeArtist.name} — BOOKING · TEKNOFAVOLA`
+		: routeData.openEvent ? `${routeData.openEvent.title} — TEKNOFAVOLA`
+		: defaultTitle
+	);
 	const description = $derived(pickLocalized(data.siteSettings, 'seo_description', data.lang));
 	const accent = $derived(data.siteSettings.accent_color || '#C6FF00');
 	const favicon = $derived(assetUrl(data.siteSettings.favicon) ?? '/brand/logo-tf-black.png');

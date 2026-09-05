@@ -5,12 +5,6 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<svelte:head>
-	{#if data.activeArtist}
-		<title>{data.activeArtist.name} — BOOKING · TEKNOFAVOLA</title>
-	{/if}
-</svelte:head>
-
 <BookingView
 	lang={data.lang}
 	artists={data.artists}
