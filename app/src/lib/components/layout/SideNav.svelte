@@ -61,7 +61,7 @@
 				style="color:{isCurrent(item.path) ? 'var(--tf-accent)' : 'var(--tf-ink)'}"
 			>
 				<span style="display:block;font-size:9px;letter-spacing:.16em;color:var(--tf-ink-3);margin-bottom:4px">{item.num}</span>
-				{item.label}
+				{lang === 'it' ? item.label_it : item.label_en}
 			</a>
 		{/each}
 	</nav>

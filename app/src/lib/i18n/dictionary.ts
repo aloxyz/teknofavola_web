@@ -112,7 +112,7 @@ export const COPY = {
 		descEmpty: 'The story of this night will be published shortly.',
 		gallery: 'GALLERY',
 		eventNotFound: 'Event not found.',
-		backToFavole: '← LE NOSTRE FAVOLE',
+		backToFavole: '← OUR FABLES',
 		bookingKicker: '03 / BOOKING ARTIST',
 		bookingIntro: 'Write to us to bring a TeknoFavola artist to your event. Pick a name from the index to see their profile.',
 		artistIndex: 'ARTIST INDEX',
