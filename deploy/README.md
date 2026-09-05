@@ -99,10 +99,37 @@ idempotenti, non toccano nulla che esiste già.
 
 ## Backup
 
-Due cose contengono dati reali e vanno backuppate periodicamente:
+`backup.sh` fa un dump compresso di Postgres (schema + contenuti) e un archivio del volume
+`directus-uploads` (logo, flyer, foto, video…), li salva in `~/backups` e cancella quelli più
+vecchi di 14 giorni. Gira solo in locale sul server — protegge da "ho rotto qualcosa nel CMS",
+non da un guasto del server stesso (per quello serve una copia offsite, es. Hetzner Storage Box
+o gli snapshot automatici di Hetzner Cloud — non configurati qui).
 
-- Il volume `db-data` (Postgres — schema e contenuti): `docker compose exec postgres pg_dump -U directus teknofavola > backup.sql`
-- Il volume `directus-uploads` (media caricati: logo, flyer, foto, video…)
+Prova manuale:
+
+```bash
+cd ~/teknofavola_web/deploy
+./backup.sh
+```
+
+Automatico ogni notte alle 3:15 (utente `admin`, non root):
+
+```bash
+crontab -e
+# aggiungi:
+15 3 * * * /home/admin/teknofavola_web/deploy/backup.sh >> /home/admin/backups/backup.log 2>&1
+```
+
+Ripristino, in caso di bisogno:
+
+```bash
+cd ~/teknofavola_web/deploy
+docker compose stop directus app
+gunzip -c ~/backups/db-<data>.sql.gz | docker compose exec -T postgres psql -U directus teknofavola
+docker run --rm -v teknofavola_directus-uploads:/data -v ~/backups:/backup alpine \
+  sh -c "rm -rf /data/* && tar xzf /backup/uploads-<data>.tar.gz -C /data"
+docker compose up -d
+```
 
 ## Cosa NON è incluso
 
