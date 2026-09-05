@@ -25,6 +25,7 @@ docker compose exec -T postgres pg_dump -U "${POSTGRES_USER:-directus}" "${POSTG
 
 echo "[$TIMESTAMP] Archiving uploads..."
 docker run --rm \
+  --user "$(id -u):$(id -g)" \
   -v teknofavola_directus-uploads:/data:ro \
   -v "$BACKUP_DIR":/backup \
   alpine:latest \
