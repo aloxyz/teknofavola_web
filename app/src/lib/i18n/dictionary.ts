@@ -32,7 +32,7 @@ export const COPY = {
 		gallery: 'GALLERY',
 		eventNotFound: 'Evento non trovato.',
 		backToFavole: '← LE NOSTRE FAVOLE',
-		bookingKicker: '02 / BOOKING ARTIST',
+		bookingKicker: '03 / BOOKING ARTIST',
 		bookingIntro: 'Scrivici per portare un artista TeknoFavola nel tuo evento. Scegli un nome dall’indice per vedere la sua scheda.',
 		artistIndex: 'INDICE ARTISTI',
 		profileType: 'TIPO PROFILO',
@@ -77,9 +77,15 @@ export const COPY = {
 		venue: 'LUOGO',
 		labelActiveIntro: 'Le uscite del collettivo e degli artisti ospiti.',
 		studioActiveIntro: 'Produzione, registrazione, mix, master, ghost production e sala prove.',
+		merchActiveIntro: 'Magliette, felpe e accessori del collettivo.',
 		gear: 'ATTREZZATURA',
 		optionalServices: 'SERVIZI OPZIONALI',
-		pricing: 'PREZZI'
+		pricing: 'PREZZI',
+		request: 'RICHIEDI',
+		requestingProduct: 'RICHIESTA PER',
+		aboutMoreLink: 'LA NOSTRA STORIA →',
+		aboutBodyEmpty: 'La storia del collettivo sarà pubblicata a breve.',
+		aboutKicker: '01 / CHI SIAMO'
 	},
 	en: {
 		menu: 'MENU',
@@ -107,7 +113,7 @@ export const COPY = {
 		gallery: 'GALLERY',
 		eventNotFound: 'Event not found.',
 		backToFavole: '← LE NOSTRE FAVOLE',
-		bookingKicker: '02 / BOOKING ARTIST',
+		bookingKicker: '03 / BOOKING ARTIST',
 		bookingIntro: 'Write to us to bring a TeknoFavola artist to your event. Pick a name from the index to see their profile.',
 		artistIndex: 'ARTIST INDEX',
 		profileType: 'PROFILE TYPE',
@@ -152,9 +158,15 @@ export const COPY = {
 		venue: 'VENUE',
 		labelActiveIntro: 'Releases from the collective and guest artists.',
 		studioActiveIntro: 'Production, recording, mix, master, ghost production and the rehearsal room.',
+		merchActiveIntro: 'T-shirts, hoodies and gear from the collective.',
 		gear: 'GEAR',
 		optionalServices: 'OPTIONAL SERVICES',
-		pricing: 'PRICING'
+		pricing: 'PRICING',
+		request: 'REQUEST',
+		requestingProduct: 'REQUEST FOR',
+		aboutMoreLink: 'OUR STORY →',
+		aboutBodyEmpty: 'The collective’s story will be published shortly.',
+		aboutKicker: '01 / ABOUT US'
 	}
 } as const;
 
@@ -185,10 +197,10 @@ interface SoonCopy {
 // Structural "coming soon" copy for formats not live yet. This is UI/structure
 // text (allowed to live in code per the brief), not editorial content — the
 // moment real dj_sets/releases/services exist, the pages render those instead.
-export const SOON: Record<'once' | 'label' | 'studio', Record<Locale, SoonCopy>> = {
+export const SOON: Record<'once' | 'label' | 'studio' | 'merch', Record<Locale, SoonCopy>> = {
 	once: {
 		it: {
-			kicker: '03 / FORMAT VIDEO',
+			kicker: '04 / FORMAT VIDEO',
 			titleA: 'ONCE UPON',
 			titleB: 'A TIME',
 			intro: 'Il format non è ancora iniziato. Sarà una serie di set filmati, un episodio per artista.',
@@ -203,7 +215,7 @@ export const SOON: Record<'once' | 'label' | 'studio', Record<Locale, SoonCopy>>
 			fields: ['NOME', 'EMAIL', 'ARTISTA', 'GENERE', 'LINK SOCIAL', 'LINK SET / DEMO', 'MESSAGGIO']
 		},
 		en: {
-			kicker: '03 / VIDEO FORMAT',
+			kicker: '04 / VIDEO FORMAT',
 			titleA: 'ONCE UPON',
 			titleB: 'A TIME',
 			intro: 'The format has not started yet. It will be a series of filmed sets, one episode per artist.',
@@ -220,7 +232,7 @@ export const SOON: Record<'once' | 'label' | 'studio', Record<Locale, SoonCopy>>
 	},
 	label: {
 		it: {
-			kicker: '04 / LABEL',
+			kicker: '05 / LABEL',
 			titleA: 'THE FABLE',
 			titleB: 'LABEL',
 			intro: 'La label non è ancora attiva. Qui usciranno le release del collettivo e degli artisti ospiti.',
@@ -235,7 +247,7 @@ export const SOON: Record<'once' | 'label' | 'studio', Record<Locale, SoonCopy>>
 			fields: ['NOME ARTISTA', 'EMAIL', 'LINK DEMO', 'GENERE', 'SOCIAL', 'MESSAGGIO']
 		},
 		en: {
-			kicker: '04 / LABEL',
+			kicker: '05 / LABEL',
 			titleA: 'THE FABLE',
 			titleB: 'LABEL',
 			intro: 'The label is not active yet. Releases from the collective and guest artists will come out here.',
@@ -252,7 +264,7 @@ export const SOON: Record<'once' | 'label' | 'studio', Record<Locale, SoonCopy>>
 	},
 	studio: {
 		it: {
-			kicker: '05 / STUDIO',
+			kicker: '06 / STUDIO',
 			titleA: 'THE FABLE',
 			titleB: 'STUDIO',
 			intro: 'Studio e sala prove non sono ancora operativi online. Per informazioni puoi già scriverci.',
@@ -262,7 +274,7 @@ export const SOON: Record<'once' | 'label' | 'studio', Record<Locale, SoonCopy>>
 			fields: ['NOME', 'EMAIL', 'TELEFONO', 'SERVIZIO RICHIESTO', 'DATA DESIDERATA', 'MESSAGGIO']
 		},
 		en: {
-			kicker: '05 / STUDIO',
+			kicker: '06 / STUDIO',
 			titleA: 'THE FABLE',
 			titleB: 'STUDIO',
 			intro: 'Studio and rehearsal room are not online yet. You can already write to us for information.',
@@ -270,6 +282,38 @@ export const SOON: Record<'once' | 'label' | 'studio', Record<Locale, SoonCopy>>
 			blocks: [],
 			formTitle: 'INFORMATION / BOOKING REQUEST',
 			fields: ['NAME', 'EMAIL', 'PHONE', 'REQUESTED SERVICE', 'PREFERRED DATE', 'MESSAGE']
+		}
+	},
+	merch: {
+		it: {
+			kicker: '07 / MERCH',
+			titleA: 'TEKNOFAVOLA',
+			titleB: 'MERCH',
+			intro: 'Il merchandising non è ancora in vendita. Qui arriveranno magliette, felpe e accessori del collettivo.',
+			structureHint: 'Ogni prodotto avrà nome, prezzo, foto e un pulsante per richiederlo con il modulo qui sotto.',
+			blocks: [
+				{ tag: 'PRODOTTO 001', title: 'IN PREPARAZIONE', body: 'Primo prodotto in lavorazione.', foot: 'IN ARRIVO' },
+				{ tag: 'CATALOGO', title: 'TUTTI I PRODOTTI', body: 'I prodotti pubblicati resteranno consultabili qui.', foot: 'IN ARRIVO' },
+				{ tag: 'IDEE', title: 'SUGGERISCI UN PRODOTTO', body: 'Hai un’idea per il merch? Scrivicela con il modulo qui sotto.', foot: 'APERTE' },
+				{ tag: 'RICHIESTA', title: 'MODULO DEDICATO', body: 'Ogni prodotto avrà un pulsante “RICHIEDI” che precompila il modulo con il suo nome.', foot: 'IN ARRIVO' }
+			],
+			formTitle: 'RICHIESTA INFORMAZIONI MERCH',
+			fields: ['NOME', 'EMAIL', 'PRODOTTO DI INTERESSE', 'MESSAGGIO']
+		},
+		en: {
+			kicker: '07 / MERCH',
+			titleA: 'TEKNOFAVOLA',
+			titleB: 'MERCH',
+			intro: 'Merchandise is not on sale yet. T-shirts, hoodies and gear from the collective will come out here.',
+			structureHint: 'Every product will carry a name, price, photo and a button to request it with the form below.',
+			blocks: [
+				{ tag: 'PRODUCT 001', title: 'IN PREPARATION', body: 'First product in the works.', foot: 'COMING' },
+				{ tag: 'CATALOGUE', title: 'EVERY PRODUCT', body: 'Published products stay browsable here.', foot: 'COMING' },
+				{ tag: 'IDEAS', title: 'SUGGEST A PRODUCT', body: 'Got an idea for the merch? Send it with the form below.', foot: 'OPEN' },
+				{ tag: 'REQUEST', title: 'DEDICATED FORM', body: 'Every product will have a “REQUEST” button that pre-fills the form with its name.', foot: 'COMING' }
+			],
+			formTitle: 'MERCH INFORMATION REQUEST',
+			fields: ['NAME', 'EMAIL', 'PRODUCT OF INTEREST', 'MESSAGE']
 		}
 	}
 };

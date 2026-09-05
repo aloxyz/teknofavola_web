@@ -1,0 +1,7 @@
+# Local Directus config — copy from .env.example, never commit real values.
+.env
+
+# Persistent runtime data (bind-mounted volume): user-uploaded media and
+# Directus's cached image/asset transforms. Content lives in Directus, not
+# in git — see README.md.
+uploads/

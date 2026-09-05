@@ -11,7 +11,7 @@
 
 	const title = $derived(pickLocalized(data.siteSettings, 'seo_title', data.lang) ?? data.siteSettings.site_name);
 	const description = $derived(pickLocalized(data.siteSettings, 'seo_description', data.lang));
-	const accent = $derived(data.siteSettings.accent_color || '#ff563c');
+	const accent = $derived(data.siteSettings.accent_color || '#C6FF00');
 	const favicon = $derived(assetUrl(data.siteSettings.favicon) ?? '/brand/logo-tf-black.png');
 </script>
 

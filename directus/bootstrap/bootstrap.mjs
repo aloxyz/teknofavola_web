@@ -43,7 +43,11 @@ async function api(method, path, body) {
     },
     body: body ? JSON.stringify(body) : undefined
   });
-  if (res.status === 404) return null;
+  // This Directus version returns 403 (not 404) for GET on a collection/item
+  // that doesn't exist, to avoid leaking existence to unauthorized callers.
+  // Since this script always authenticates as an admin, a 403 on a GET can
+  // only mean "not found" here, so treat it the same as a real 404.
+  if (res.status === 404 || (method === 'GET' && res.status === 403)) return null;
   const text = await res.text();
   const json = text ? JSON.parse(text) : null;
   if (!res.ok) {

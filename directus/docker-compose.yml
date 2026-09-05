@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-directus}
       POSTGRES_DB: ${POSTGRES_DB:-teknofavola}
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data:Z
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-directus} -d ${POSTGRES_DB:-teknofavola}"]
       interval: 5s
@@ -46,8 +46,8 @@ services:
       RATE_LIMITER_POINTS: "50"
       RATE_LIMITER_DURATION: "1"
     volumes:
-      - ./uploads:/directus/uploads
-      - extensions-data:/directus/extensions
+      - ./uploads:/directus/uploads:Z
+      - extensions-data:/directus/extensions:Z
 
 volumes:
   db-data:

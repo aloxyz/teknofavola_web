@@ -7,6 +7,7 @@ export const SITE_SETTINGS_FALLBACK: SiteSettings = {
 	id: 'fallback',
 	site_name: 'TEKNOFAVOLA',
 	logo: null,
+	hero_bg_video: null,
 	favicon: null,
 	collective_tag_it: 'COLLETTIVO TEKNO',
 	collective_tag_en: 'TEKNO COLLECTIVE',
@@ -25,5 +26,5 @@ export const SITE_SETTINGS_FALLBACK: SiteSettings = {
 	seo_title_en: 'TeknoFavola',
 	seo_description_it: null,
 	seo_description_en: null,
-	accent_color: '#ff563c'
+	accent_color: '#C6FF00'
 };

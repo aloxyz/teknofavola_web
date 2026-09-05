@@ -5,7 +5,7 @@ import { getArtists } from '$lib/server/api/artists';
 import { getOnceUponATimeEpisodes } from '$lib/server/api/djsets';
 import { episodeSlug } from '$lib/utils/episodeSlug';
 
-const STATIC_PATHS = ['/', '/favole', '/booking', '/once-upon-a-time', '/label', '/studio'];
+const STATIC_PATHS = ['/', '/chi-siamo', '/favole', '/booking', '/once-upon-a-time', '/label', '/studio', '/merch'];
 
 export const GET: RequestHandler = async () => {
 	const origin = (env.PUBLIC_SITE_ORIGIN || 'http://localhost:5173').replace(/\/$/, '');

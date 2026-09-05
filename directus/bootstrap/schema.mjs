@@ -172,6 +172,32 @@ function fileRepeater(field, opts = {}) {
   };
 }
 
+function sectionRepeater(field, opts = {}) {
+  return {
+    field,
+    type: 'json',
+    meta: {
+      interface: 'list',
+      special: ['cast-json'],
+      note: opts.note,
+      width: 'full',
+      // Directus otherwise shows the raw field key ("Sections"), which isn't
+      // obviously "where the bio goes" for a non-technical admin.
+      translations: opts.label ? [{ language: 'en-US', translation: opts.label }] : undefined,
+      options: {
+        template: '{{ heading_it }}',
+        fields: [
+          { field: 'heading_it', name: 'Heading (IT)', type: 'string', meta: { interface: 'input', width: 'half' } },
+          { field: 'heading_en', name: 'Heading (EN)', type: 'string', meta: { interface: 'input', width: 'half' } },
+          { field: 'body_it', name: 'Body (IT)', type: 'text', meta: { interface: 'textarea', width: 'full' } },
+          { field: 'body_en', name: 'Body (EN)', type: 'text', meta: { interface: 'textarea', width: 'full' } }
+        ]
+      }
+    },
+    schema: { is_nullable: true }
+  };
+}
+
 function stringListRepeater(field, opts = {}) {
   return {
     field,
@@ -193,7 +219,7 @@ function stringListRepeater(field, opts = {}) {
 
 export const PROFILE_TYPES = ['dj', 'photographer', 'videomaker', 'graphic', 'tattoo_artist', 'other'];
 export const SOCIAL_FORMATS = ['teknofavola', 'once_upon_a_time', 'fable_label', 'fable_studio'];
-export const SUBMISSION_TYPES = ['booking', 'once_upon_a_time', 'label_demo', 'studio_request'];
+export const SUBMISSION_TYPES = ['booking', 'once_upon_a_time', 'label_demo', 'studio_request', 'merch_interest'];
 
 export const collections = [
   {
@@ -204,6 +230,7 @@ export const collections = [
     fields: [
       text('site_name', { required: true, default: 'TEKNOFAVOLA' }),
       fileField('logo', { note: 'Shown in the sidebar, the home hero and the footer. Use a transparent PNG/SVG.' }),
+      fileField('hero_bg_video', { image: false, note: 'Optional MP4 background video behind the home hero logo (muted, looping, no sound). Leave empty to keep the plain background.' }),
       fileField('favicon', { image: false, note: 'Browser tab icon.' }),
       text('collective_tag_it', { note: 'Small kicker under the wordmark, e.g. "COLLETTIVO TEKNO".', default: 'COLLETTIVO TEKNO' }),
       text('collective_tag_en', { default: 'TEKNO COLLECTIVE' }),
@@ -223,6 +250,21 @@ export const collections = [
       longText('seo_description_it'),
       longText('seo_description_en'),
       text('accent_color', { note: 'Hex color for the single brand accent.', default: '#ff563c' })
+    ]
+  },
+
+  {
+    collection: 'about_page',
+    icon: 'auto_stories',
+    note: 'The "Chi siamo" page: crew bio and history, as an ordered list of heading + paragraph sections the client can freely add to, reorder or remove.',
+    singleton: true,
+    fields: [
+      text('title_it', { default: 'CHI SIAMO' }),
+      text('title_en', { default: 'ABOUT US' }),
+      sectionRepeater('sections', {
+        label: 'Bio / story sections',
+        note: 'This is the crew bio and history. One entry per header + paragraph block — add as many as needed, drag to reorder; both languages are optional per entry.'
+      })
     ]
   },
 
@@ -317,6 +359,23 @@ export const collections = [
   },
 
   {
+    collection: 'merch_items',
+    icon: 'shopping_bag',
+    note: 'Merchandise catalogue. No checkout on the site yet — each item is requested through the contact form.',
+    sortField: 'sort_order',
+    statusField: true,
+    fields: [
+      text('name', { required: true }),
+      text('price', { note: 'Free-form, shown as-is — e.g. "€25" or "€20–30".' }),
+      fileField('photo'),
+      longText('description_it'),
+      longText('description_en'),
+      SORT_FIELD(),
+      STATUS_FIELD
+    ]
+  },
+
+  {
     collection: 'services',
     icon: 'construction',
     note: 'The Fable Studio services (production, recording, mix, master, ghost production).',
@@ -374,4 +433,4 @@ export const collections = [
   }
 ];
 
-export const folders = ['Logo', 'Flyer', 'Artist Photos', 'Work Photos', 'Release Covers', 'Gallery', 'Other'];
+export const folders = ['Logo', 'Flyer', 'Artist Photos', 'Work Photos', 'Release Covers', 'Merch Photos', 'Gallery', 'Other'];

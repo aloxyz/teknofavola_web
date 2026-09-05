@@ -6,7 +6,7 @@ import type { RequestHandler } from './$types';
 import { createFormSubmission } from '$lib/server/api/formSubmissions';
 import { checkRateLimit } from '$lib/server/rateLimit';
 
-const SUBMISSION_TYPES = ['booking', 'once_upon_a_time', 'label_demo', 'studio_request'] as const;
+const SUBMISSION_TYPES = ['booking', 'once_upon_a_time', 'label_demo', 'studio_request', 'merch_interest'] as const;
 
 const bodySchema = z.object({
 	type: z.enum(SUBMISSION_TYPES),

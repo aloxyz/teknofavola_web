@@ -4,7 +4,7 @@ export type ProfileType = 'dj' | 'photographer' | 'videomaker' | 'graphic' | 'ta
 
 export type SocialFormat = 'teknofavola' | 'once_upon_a_time' | 'fable_label' | 'fable_studio';
 
-export type SubmissionType = 'booking' | 'once_upon_a_time' | 'label_demo' | 'studio_request';
+export type SubmissionType = 'booking' | 'once_upon_a_time' | 'label_demo' | 'studio_request' | 'merch_interest';
 
 export interface DirectusFile {
 	id: string;
@@ -22,10 +22,25 @@ export interface GalleryItem {
 	file: string | DirectusFile;
 }
 
+export interface AboutSection {
+	heading_it: string | null;
+	heading_en: string | null;
+	body_it: string | null;
+	body_en: string | null;
+}
+
+export interface AboutPageRecord {
+	id: string;
+	title_it: string | null;
+	title_en: string | null;
+	sections: AboutSection[] | null;
+}
+
 export interface SiteSettings {
 	id: string;
 	site_name: string;
 	logo: string | DirectusFile | null;
+	hero_bg_video: string | DirectusFile | null;
 	favicon: string | DirectusFile | null;
 	collective_tag_it: string | null;
 	collective_tag_en: string | null;
@@ -113,6 +128,17 @@ export interface ReleaseRecord {
 	status: Status;
 }
 
+export interface MerchItemRecord {
+	id: string;
+	name: string;
+	price: string | null;
+	photo: string | DirectusFile | null;
+	description_it: string | null;
+	description_en: string | null;
+	sort_order: number | null;
+	status: Status;
+}
+
 export interface ServiceRecord {
 	id: string;
 	name_it: string;
@@ -152,10 +178,12 @@ export interface FormSubmissionRecord {
 
 export interface DirectusSchema {
 	site_settings: SiteSettings;
+	about_page: AboutPageRecord;
 	events: EventRecord[];
 	artists: ArtistRecord[];
 	dj_sets: DjSetRecord[];
 	releases: ReleaseRecord[];
+	merch_items: MerchItemRecord[];
 	services: ServiceRecord[];
 	studio_info: StudioInfoRecord;
 	social_links: SocialLinkRecord[];
