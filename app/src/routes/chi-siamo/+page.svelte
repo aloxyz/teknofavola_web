@@ -27,12 +27,16 @@
 				{#each sections as section, i (i)}
 					{@const heading = pickLocalized(section, 'heading', data.lang)}
 					{@const body = pickLocalized(section, 'body', data.lang)}
+					{@const linkLabel = pickLocalized(section, 'link_label', data.lang) ?? t(data.lang, 'open')}
 					<div>
 						{#if heading}
 							<h2 style="margin:0 0 16px;font-size:clamp(20px,2.6vw,32px);letter-spacing:-0.02em;color:var(--tf-ink)">{heading}</h2>
 						{/if}
 						{#if body}
 							<p style="margin:0;font-size:15px;line-height:1.75;color:var(--tf-ink-2)">{body}</p>
+						{/if}
+						{#if section.link_url}
+							<a href={section.link_url} target="_blank" rel="noopener" style="display:inline-block;margin-top:14px">{linkLabel}</a>
 						{/if}
 					</div>
 				{/each}

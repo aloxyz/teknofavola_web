@@ -195,7 +195,20 @@ function sectionRepeater(field, opts = {}) {
           { field: 'heading_it', name: 'Heading (IT)', type: 'string', meta: { interface: 'input', width: 'half' } },
           { field: 'heading_en', name: 'Heading (EN)', type: 'string', meta: { interface: 'input', width: 'half' } },
           { field: 'body_it', name: 'Body (IT)', type: 'text', meta: { interface: 'textarea', width: 'full' } },
-          { field: 'body_en', name: 'Body (EN)', type: 'text', meta: { interface: 'textarea', width: 'full' } }
+          { field: 'body_en', name: 'Body (EN)', type: 'text', meta: { interface: 'textarea', width: 'full' } },
+          {
+            field: 'link_label_it',
+            name: 'Link label (IT)',
+            type: 'string',
+            meta: { interface: 'input', width: 'half', note: 'Optional. Leave empty with the URL to hide the link cleanly.' }
+          },
+          { field: 'link_label_en', name: 'Link label (EN)', type: 'string', meta: { interface: 'input', width: 'half' } },
+          {
+            field: 'link_url',
+            name: 'Link URL',
+            type: 'string',
+            meta: { interface: 'input', width: 'full', note: 'Optional. Leave empty and no link shows on the site.' }
+          }
         ]
       }
     },

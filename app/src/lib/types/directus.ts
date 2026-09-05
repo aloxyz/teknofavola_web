@@ -27,6 +27,9 @@ export interface AboutSection {
 	heading_en: string | null;
 	body_it: string | null;
 	body_en: string | null;
+	link_label_it: string | null;
+	link_label_en: string | null;
+	link_url: string | null;
 }
 
 export interface AboutPageRecord {
