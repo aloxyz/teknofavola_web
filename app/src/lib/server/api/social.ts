@@ -28,8 +28,3 @@ export async function getSocialLinksGrouped(): Promise<SocialGroup[] | null> {
 		return null;
 	}
 }
-
-/** All links for one format with a non-empty URL — used by coming-soon pages' "channels" row. */
-export function activeLinks(group: SocialGroup | undefined): SocialLinkRecord[] {
-	return group ? group.links.filter((l) => !!l.url) : [];
-}
