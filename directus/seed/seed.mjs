@@ -220,7 +220,7 @@ async function main() {
     footer_about_en: 'TEKNO COLLECTIVE · MESSINA / SICILY',
     footer_legal_it: 'P.IVA / DATI FISCALI — DA INSERIRE',
     footer_legal_en: 'VAT / LEGAL DETAILS — TO BE ADDED',
-    accent_color: '#ff563c'
+    accent_color: '#C6FF00'
   });
 
   console.log('\nSeed complete.');
