@@ -1,14 +1,14 @@
 # Deploy — un unico server
 
 Sito (SvelteKit) + CMS (Directus/Postgres) + reverse proxy con HTTPS automatico (Caddy), tutto su
-un solo VPS con Docker Compose. Pensato per un server piccolo (2 vCPU / 4GB RAM, es. Hetzner CX22).
+un solo VPS con Docker Compose. Pensato per un server piccolo (2 vCPU / 4GB RAM, es. Hetzner CX23).
 
 ## 1. Crea il server
 
 Su [Hetzner Cloud Console](https://console.hetzner.cloud):
 
 - Immagine: **Ubuntu 24.04**
-- Tipo: **CX22** (o CAX11 se preferisci ARM, stesso prezzo circa)
+- Tipo: **CX23** (o CAX11 se preferisci ARM, stesso prezzo circa)
 - Location: **Falkenstein** o **Nuremberg** (bassa latenza per l'Italia)
 - SSH key: aggiungi la tua chiave pubblica (`~/.ssh/id_ed25519.pub`) in fase di creazione — niente
   password da gestire dopo
