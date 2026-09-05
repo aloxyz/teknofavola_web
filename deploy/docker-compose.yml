@@ -56,12 +56,23 @@ services:
       RATE_LIMITER_POINTS: "50"
       RATE_LIMITER_DURATION: "1"
       # No default in Directus (unlimited) otherwise — a camera-original
-      # photo can be 30-80MB, which also breaks its own thumbnail generation
-      # (see ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION's default 6000px limit).
-      # 50mb leaves headroom for a legitimate short hero background video
-      # while rejecting that kind of oversized photo outright, with a clear
-      # error at upload time instead of a silently-missing thumbnail later.
-      FILES_MAX_UPLOAD_SIZE: "50mb"
+      # photo can be 30-80MB. 10mb comfortably fits a well-exported photo at
+      # the resolution this site actually uses (see the dimension limit
+      # below) while protecting page load time for visitors and the
+      # server's 40GB disk — rejected with a clear error at upload time
+      # instead of a silently-missing thumbnail later. A future hero
+      # background video may need a temporary one-off increase if it
+      # doesn't fit; ask and it can be raised then and lowered back after.
+      FILES_MAX_UPLOAD_SIZE: "10mb"
+      # No page on the site ever requests wider than 900px (the event flyer
+      # detail view — everything else is 600-700px), so even accounting for
+      # retina displays there's no real use for a source image above this.
+      # Deliberately well under Directus's own default (6000px): keeps
+      # transform CPU/memory cost low on a small VPS and keeps the
+      # originals themselves (which count toward the 40GB disk) from
+      # ballooning. Uploads above this still succeed but never get a
+      # thumbnail anywhere (panel or site) — resize before uploading.
+      ASSETS_TRANSFORM_IMAGE_MAX_DIMENSION: "3000"
     volumes:
       - directus-uploads:/directus/uploads
       - directus-extensions:/directus/extensions
