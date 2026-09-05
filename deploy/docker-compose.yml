@@ -43,6 +43,14 @@ services:
       # true already; set explicitly so it survives an eventual v12 upgrade
       # (which flips the default to false).
       IP_TRUST_PROXY: "true"
+      # Directus's own default CSP blocks an inline <script> its admin app
+      # needs for some interfaces (e.g. rendering m2m relation fields),
+      # causing a generic "relationship is not configured properly" error
+      # in the panel with no server-side cause. This only relaxes the CSP
+      # Directus sends for its OWN admin app — unrelated to, and does not
+      # affect, the separate strict CSP the public SvelteKit site sends.
+      CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC: "'self' 'unsafe-inline' 'unsafe-eval'"
+      CONTENT_SECURITY_POLICY_DIRECTIVES__SCRIPT_SRC_ELEM: "'self' 'unsafe-inline' 'unsafe-eval'"
       # Rate-limit Directus's own login/API to slow down brute-force + abuse.
       RATE_LIMITER_ENABLED: "true"
       RATE_LIMITER_POINTS: "50"
