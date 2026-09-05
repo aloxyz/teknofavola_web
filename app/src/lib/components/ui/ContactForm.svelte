@@ -29,6 +29,13 @@
 	type Status = 'idle' | 'sending' | 'sent' | 'error';
 	let status = $state<Status>('idle');
 
+	// Infers input type/autocomplete/required from the *visible label text*
+	// (IT+EN keywords) rather than from structured per-field metadata passed
+	// by the caller. Deliberately fragile: renaming a label (e.g. "NOME" ->
+	// "NOME COMPLETO") can silently change a field's behavior. Left as-is —
+	// fixing it properly means changing this component's props for every
+	// caller (ArtistProfile, ComingSoonView, merch), which is out of scope
+	// for a no-behavior-change cleanup.
 	function fieldMeta(label: string) {
 		const up = label.toUpperCase();
 		const isMessage = up.startsWith('MESSAG');
