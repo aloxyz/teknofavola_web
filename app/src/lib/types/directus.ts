@@ -176,8 +176,8 @@ export interface FormSubmissionRecord {
 	type: SubmissionType;
 	name: string;
 	email: string;
-	payload: Record<string, unknown>;
-	ip_hash?: string;
+	payload: Record<string, unknown> | null;
+	ip_hash: string | null;
 }
 
 export interface DirectusSchema {
