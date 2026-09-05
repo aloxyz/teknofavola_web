@@ -62,11 +62,6 @@ export interface SiteSettings {
 	accent_color: string | null;
 }
 
-export interface EventArtistLink {
-	id: string;
-	artist: string | ArtistRecord;
-}
-
 export interface EventRecord {
 	id: string;
 	title: string;
@@ -81,8 +76,7 @@ export interface EventRecord {
 	venue: string | null;
 	gallery: GalleryItem[] | null;
 	featured: boolean;
-	djs: EventArtistLink[] | null;
-	guest_djs: LabelItem[] | null;
+	lineup: LabelItem[] | null;
 	sort_order: number | null;
 	status: Status;
 }

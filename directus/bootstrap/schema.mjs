@@ -292,32 +292,11 @@ export const collections = [
       text('venue', { note: 'Optional venue / city.' }),
       fileRepeater('gallery', { note: 'Optional photo gallery for the event drawer.' }),
       boolean('featured', { note: 'Highlight this event above the others.' }),
-      {
-        field: 'djs',
-        type: 'alias',
-        meta: {
-          interface: 'list-m2m',
-          special: ['m2m'],
-          note: 'Resident artists who played this night — picked from the existing Booking roster. Shown as links to their booking profile.',
-          width: 'full'
-        },
-        schema: null
-      },
-      stringListRepeater('guest_djs', {
-        note: 'Guest DJs not in the Booking roster — just a name, no profile/link. Shown next to the residents, styled differently.'
+      stringListRepeater('lineup', {
+        note: 'Who played this night — one entry per name, free text (no link to the Booking roster). Drag to reorder.'
       }),
       SORT_FIELD(),
       STATUS_FIELD
-    ]
-  },
-
-  {
-    collection: 'events_artists',
-    icon: 'link',
-    note: 'Junction: which artists played which event. Managed from the event screen, not directly.',
-    fields: [
-      m2o('event', 'events', { required: true, oneField: 'djs', junctionField: 'artist' }),
-      m2o('artist', 'artists', { required: true, template: '{{ name }}' })
     ]
   },
 

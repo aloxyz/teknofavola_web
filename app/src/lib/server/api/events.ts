@@ -4,7 +4,7 @@ import type { EventRecord } from '$lib/types/directus';
 
 // The Directus SDK's generated field-selection type doesn't accept a plain
 // array built at runtime; the shape is still correct for the REST API.
-const FIELDS: any = ['*', { gallery: ['file'] }, { djs: ['id', 'artist.name', 'artist.slug'] }];
+const FIELDS: any = ['*', { gallery: ['file'] }];
 
 export async function getEvents(): Promise<EventRecord[] | null> {
 	try {
