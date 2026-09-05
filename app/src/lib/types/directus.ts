@@ -82,6 +82,7 @@ export interface EventRecord {
 	gallery: GalleryItem[] | null;
 	featured: boolean;
 	djs: EventArtistLink[] | null;
+	guest_djs: LabelItem[] | null;
 	sort_order: number | null;
 	status: Status;
 }

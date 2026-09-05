@@ -37,6 +37,7 @@
 			.map((d) => (typeof d.artist === 'string' ? null : (d.artist as ArtistRecord)))
 			.filter((a): a is ArtistRecord => !!a)
 	);
+	const guestDjs = $derived((event.guest_djs ?? []).map((g) => g.label).filter(Boolean));
 
 	const meta = $derived([
 		{ label: t(lang, 'date'), value: dateLabel, href: undefined as string | undefined },
@@ -87,12 +88,15 @@
 			<h3 style="margin:0 0 10px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'description')}</h3>
 			<p style="margin:0;font-size:14px;line-height:1.7;color:var(--tf-ink-2)">{description}</p>
 		</div>
-		{#if djs.length}
+		{#if djs.length || guestDjs.length}
 			<div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px">
 				<h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'lineup')}</h3>
 				<div style="display:flex;flex-wrap:wrap;gap:2px">
 					{#each djs as artist (artist.slug)}
 						<a href="/booking/{artist.slug}" class="tf-eventdj" style="border:2px solid var(--tf-accent);color:var(--tf-accent);padding:9px 14px;font-size:11px;letter-spacing:.1em;font-weight:800">{artist.name}</a>
+					{/each}
+					{#each guestDjs as name (name)}
+						<span class="tf-eventguest" style="border:2px dashed var(--tf-ink-3);color:var(--tf-ink-2);padding:9px 14px;font-size:11px;letter-spacing:.1em;font-weight:800" title={t(lang, 'guestDj')}>{name}</span>
 					{/each}
 				</div>
 			</div>

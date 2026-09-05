@@ -293,11 +293,14 @@ export const collections = [
         meta: {
           interface: 'list-m2m',
           special: ['m2m'],
-          note: 'Artists who played this night. Shown as links to their booking profile.',
+          note: 'Resident artists who played this night — picked from the existing Booking roster. Shown as links to their booking profile.',
           width: 'full'
         },
         schema: null
       },
+      stringListRepeater('guest_djs', {
+        note: 'Guest DJs not in the Booking roster — just a name, no profile/link. Shown next to the residents, styled differently.'
+      }),
       SORT_FIELD(),
       STATUS_FIELD
     ]
