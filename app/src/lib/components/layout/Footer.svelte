@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Logo from './Logo.svelte';
 	import { t, type Locale } from '$lib/i18n/dictionary';
+	import { pickLocalized } from '$lib/utils/localized';
+	import { withUrl } from '$lib/utils/records';
 	import { SOCIAL_FORMAT_LABEL } from '$lib/config/socialFormats';
 	import type { SiteSettings } from '$lib/types/directus';
 	import type { SocialGroup } from '$lib/server/api/social';
@@ -8,13 +10,12 @@
 	let { lang, siteSettings, socialGroups }: { lang: Locale; siteSettings: SiteSettings; socialGroups: SocialGroup[] } =
 		$props();
 
-	const footerAbout = $derived(lang === 'it' ? siteSettings.footer_about_it : siteSettings.footer_about_en);
-	const footerLegal = $derived(lang === 'it' ? siteSettings.footer_legal_it : siteSettings.footer_legal_en);
+	const footerAbout = $derived(pickLocalized(siteSettings, 'footer_about', lang));
+	const footerLegal = $derived(pickLocalized(siteSettings, 'footer_legal', lang));
 
 	const footerSocials = $derived(
 		socialGroups.flatMap((g) =>
-			g.links
-				.filter((l) => !!l.url)
+			withUrl(g.links)
 				.map((l) => ({
 					label: `${l.platform} · ${SOCIAL_FORMAT_LABEL[g.format]} ↗`,
 					href: l.url as string

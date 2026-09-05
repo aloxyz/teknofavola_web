@@ -7,9 +7,7 @@
 
 	let { data }: { data: PageData } = $props();
 
-	const title = $derived(
-		(data.lang === 'it' ? data.aboutPage?.title_it : data.aboutPage?.title_en) || t(data.lang, 'bioKicker')
-	);
+	const title = $derived(pickLocalized(data.aboutPage, 'title', data.lang) ?? t(data.lang, 'bioKicker'));
 	const sections = $derived(
 		(data.aboutPage?.sections ?? []).filter(
 			(s) => pickLocalized(s, 'heading', data.lang) || pickLocalized(s, 'body', data.lang)

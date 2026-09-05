@@ -11,7 +11,7 @@
 	<div style="position:relative;aspect-ratio:16/9;border:2px solid var(--tf-line-2);background:#000">
 		<iframe
 			src={embed.embedUrl}
-			title="video"
+			title={t(lang, 'videoIframeTitle')}
 			loading="lazy"
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			allowfullscreen

@@ -4,14 +4,13 @@
 	import ErrorBlock from '$lib/components/ui/ErrorBlock.svelte';
 	import ReleaseCard from '$lib/components/ui/ReleaseCard.svelte';
 	import { SOON, t } from '$lib/i18n/dictionary';
+	import { withUrl } from '$lib/utils/records';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const soon = $derived(SOON.label[data.lang]);
-	const channels = $derived(
-		(data.socialGroups.find((g) => g.format === 'fable_label')?.links ?? []).filter((l) => !!l.url)
-	);
+	const channels = $derived(withUrl(data.socialGroups.find((g) => g.format === 'fable_label')?.links ?? []));
 </script>
 
 {#if data.error}

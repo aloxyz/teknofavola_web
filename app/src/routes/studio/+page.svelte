@@ -2,16 +2,15 @@
 	import ComingSoonView from '$lib/components/views/ComingSoonView.svelte';
 	import { SOON, t } from '$lib/i18n/dictionary';
 	import { pickLocalized } from '$lib/utils/localized';
+	import { withUrl } from '$lib/utils/records';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const soon = $derived(SOON.studio[data.lang]);
-	const channels = $derived(
-		(data.socialGroups.find((g) => g.format === 'fable_studio')?.links ?? []).filter((l) => !!l.url)
-	);
+	const channels = $derived(withUrl(data.socialGroups.find((g) => g.format === 'fable_studio')?.links ?? []));
 
-	const serviceNames = $derived(data.services.map((s) => (data.lang === 'it' ? s.name_it : s.name_en)));
+	const serviceNames = $derived(data.services.map((s) => pickLocalized(s, 'name', data.lang)));
 	const gearItems = $derived((data.studioInfo?.gear_items ?? []).map((g) => g.label));
 	const optionalItems = $derived(
 		((data.lang === 'it' ? data.studioInfo?.optional_services_it : data.studioInfo?.optional_services_en) ?? []).map(

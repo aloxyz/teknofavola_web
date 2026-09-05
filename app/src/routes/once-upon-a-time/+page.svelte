@@ -2,14 +2,13 @@
 	import OnceUponATimeView from '$lib/components/views/OnceUponATimeView.svelte';
 	import ComingSoonView from '$lib/components/views/ComingSoonView.svelte';
 	import { SOON } from '$lib/i18n/dictionary';
+	import { withUrl } from '$lib/utils/records';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	const soon = $derived(SOON.once[data.lang]);
-	const channels = $derived(
-		(data.socialGroups.find((g) => g.format === 'once_upon_a_time')?.links ?? []).filter((l) => !!l.url)
-	);
+	const channels = $derived(withUrl(data.socialGroups.find((g) => g.format === 'once_upon_a_time')?.links ?? []));
 </script>
 
 {#if !data.error && data.episodes.length > 0}

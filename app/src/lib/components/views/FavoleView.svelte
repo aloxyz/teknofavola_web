@@ -29,7 +29,7 @@
 	<ErrorBlock {lang} email={contactEmail} />
 {:else}
 	<div>
-		<PageTitle titleLines={['LE NOSTRE', 'FAVOLE']} intro={t(lang, 'favoleIntro')} />
+		<PageTitle titleLines={lang === 'it' ? ['LE NOSTRE', 'FAVOLE'] : ['OUR', 'FABLES']} intro={t(lang, 'favoleIntro')} />
 		<EventSection
 			heading="01 / {t(lang, 'upcomingEvents')}"
 			count={upcoming.length}

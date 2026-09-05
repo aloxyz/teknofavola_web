@@ -4,6 +4,7 @@
 	import LangSwitch from './LangSwitch.svelte';
 	import { NAV } from '$lib/config/nav';
 	import { t, type Locale } from '$lib/i18n/dictionary';
+	import { pickLocalized } from '$lib/utils/localized';
 	import type { SiteSettings } from '$lib/types/directus';
 
 	let { lang, siteSettings }: { lang: Locale; siteSettings: SiteSettings } = $props();
@@ -16,7 +17,7 @@
 		open = false;
 	});
 
-	const collectiveTag = $derived(lang === 'it' ? siteSettings.collective_tag_it : siteSettings.collective_tag_en);
+	const collectiveTag = $derived(pickLocalized(siteSettings, 'collective_tag', lang));
 
 	function isCurrent(path: string) {
 		const here = $page.url.pathname;
@@ -30,7 +31,7 @@
 	style="width:296px;flex:none;border-right:2px solid var(--tf-line);display:flex;flex-direction:column;gap:28px;padding:26px 22px 22px;position:sticky;top:0;height:100vh;background:var(--tf-bg)"
 >
 	<div style="display:flex;align-items:center;gap:12px">
-		<a href="/" style="border:0;background:transparent;padding:0;display:block;width:64px;flex:none" aria-label="TeknoFavola — home">
+		<a href="/" style="border:0;background:transparent;padding:0;display:block;width:64px;flex:none" aria-label="TeknoFavola — {t(lang, 'homeLabel')}">
 			<Logo {siteSettings} variant="sidebar" />
 		</a>
 		<div style="display:flex;flex-direction:column;gap:2px;min-width:0">
@@ -61,7 +62,7 @@
 				style="color:{isCurrent(item.path) ? 'var(--tf-accent)' : 'var(--tf-ink)'}"
 			>
 				<span style="display:block;font-size:9px;letter-spacing:.16em;color:var(--tf-ink-3);margin-bottom:4px">{item.num}</span>
-				{lang === 'it' ? item.label_it : item.label_en}
+				{pickLocalized(item, 'label', lang)}
 			</a>
 		{/each}
 	</nav>
