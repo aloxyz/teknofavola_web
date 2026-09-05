@@ -1,0 +1,91 @@
+name: teknofavola
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-directus}
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?set a real password in .env}"
+      POSTGRES_DB: ${POSTGRES_DB:-teknofavola}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-directus} -d ${POSTGRES_DB:-teknofavola}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  directus:
+    image: directus/directus:11
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      KEY: "${DIRECTUS_KEY:?generate one with openssl rand -hex 32}"
+      SECRET: "${DIRECTUS_SECRET:?generate one with openssl rand -hex 32}"
+      DB_CLIENT: pg
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${POSTGRES_DB:-teknofavola}
+      DB_USER: ${POSTGRES_USER:-directus}
+      DB_PASSWORD: "${POSTGRES_PASSWORD:?set a real password in .env}"
+      ADMIN_EMAIL: "${DIRECTUS_ADMIN_EMAIL:?set the first-run admin email}"
+      ADMIN_PASSWORD: "${DIRECTUS_ADMIN_PASSWORD:?set the first-run admin password}"
+      PUBLIC_URL: "https://admin.${DOMAIN:?set your domain, e.g. teknofavola.it}"
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: https://${DOMAIN}
+      WEBSOCKETS_ENABLED: "false"
+      # Rate-limit Directus's own login/API to slow down brute-force + abuse.
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_POINTS: "50"
+      RATE_LIMITER_DURATION: "1"
+    volumes:
+      - directus-uploads:/directus/uploads
+      - directus-extensions:/directus/extensions
+    ports:
+      # Not exposed to the internet — only reachable via `ssh -L 8055:localhost:8055`
+      # for troubleshooting. The public route is https://admin.<domain> via Caddy.
+      - "127.0.0.1:8055:8055"
+
+  app:
+    build:
+      context: ../app
+    restart: unless-stopped
+    depends_on:
+      - directus
+    environment:
+      DIRECTUS_URL: http://directus:8055
+      DIRECTUS_TOKEN: ${DIRECTUS_TOKEN:-}
+      PUBLIC_DIRECTUS_URL: https://admin.${DOMAIN}
+      PUBLIC_SITE_ORIGIN: https://${DOMAIN}
+      FORM_RATE_LIMIT_MAX: ${FORM_RATE_LIMIT_MAX:-5}
+      FORM_RATE_LIMIT_WINDOW_MS: ${FORM_RATE_LIMIT_WINDOW_MS:-600000}
+      FORM_IP_SALT: "${FORM_IP_SALT:?generate one with openssl rand -hex 32}"
+    ports:
+      # Same as Directus above — debugging only, public route is Caddy.
+      - "127.0.0.1:3000:3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+      - directus
+    environment:
+      DOMAIN: "${DOMAIN:?set your domain, e.g. teknofavola.it}"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  db-data:
+  directus-uploads:
+  directus-extensions:
+  caddy-data:
+  caddy-config:

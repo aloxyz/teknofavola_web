@@ -44,15 +44,15 @@ DIRECTUS_URL=http://localhost:8055 \
 DIRECTUS_ADMIN_EMAIL=admin@teknofavola.it \
 DIRECTUS_ADMIN_PASSWORD=change-me-now \
 node seed/seed.mjs
+
+DIRECTUS_URL=http://localhost:8055 \
+DIRECTUS_ADMIN_EMAIL=admin@teknofavola.it \
+DIRECTUS_ADMIN_PASSWORD=change-me-now \
+node bootstrap/permissions.mjs
 ```
 
 Il pannello è su `http://localhost:8055`. Vedi `directus/README.md` per la struttura completa
-delle collection.
-
-> **Nota su questa sandbox**: qui il pull delle immagini Docker Hub è bloccato dalla policy di
-> rete dell'ambiente, quindi `docker compose up` non è stato eseguibile in questa sessione. Schema
-> e seed sono stati validati per sintassi e contro la REST API documentata di Directus; vanno
-> verificati con un `docker compose up` reale sulla tua macchina — è il primo passo da fare.
+delle collection e per cosa fa ciascuno dei tre script.
 
 ### 2. Sito (SvelteKit)
 
@@ -131,9 +131,8 @@ Vedi anche `project/HANDOFF.md` per il contesto originale.
    un servizio come Resend/Postmark).
 5. **Rate limiter distribuito**: quello incluso è in-memory, va bene per una singola istanza; con
    più repliche serve uno store condiviso (Redis o la stessa Directus).
-6. **Hosting**: `app/Dockerfile` produce un'immagine pronta (adapter-node); `directus/` ha il suo
-   docker-compose. Vanno collegati allo stesso dominio (es. `teknofavola.it` e
-   `admin.teknofavola.it`) con reverse proxy/TLS a scelta dell'hosting.
+6. ~~**Hosting**~~ — vedi `deploy/README.md`: un unico VPS con Docker Compose (sito + Directus +
+   Postgres + Caddy per HTTPS automatico su `teknofavola.it` / `admin.teknofavola.it`).
 
 ## Caricare su una tua repo GitHub
 

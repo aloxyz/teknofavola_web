@@ -24,8 +24,20 @@ DIRECTUS_ADMIN_PASSWORD=change-me-now \
 node seed/seed.mjs
 ```
 
+E i permessi pubblici (anch'esso idempotente — necessario perché il sito possa leggere/scrivere
+qualcosa: senza, ogni richiesta del frontend torna 403):
+
+```bash
+DIRECTUS_URL=http://localhost:8055 \
+DIRECTUS_ADMIN_EMAIL=admin@teknofavola.it \
+DIRECTUS_ADMIN_PASSWORD=change-me-now \
+node bootstrap/permissions.mjs
+```
+
 `bootstrap/schema.mjs` è la fonte di verità delle collection: per aggiungere un campo, lo si
-aggiunge lì e si rilancia `bootstrap.mjs` (salta tutto ciò che esiste già).
+aggiunge lì e si rilancia `bootstrap.mjs` (salta tutto ciò che esiste già). Una nuova collection
+con `statusField: true` ottiene automaticamente lettura pubblica filtrata su `published` al
+prossimo giro di `permissions.mjs`, senza doverlo aggiornare a mano.
 
 ## Collection
 
@@ -56,14 +68,15 @@ bootstrap (`Logo`, `Flyer`, `Artist Photos`, `Work Photos`, `Release Covers`, `G
 - **`dj_sets.is_once_upon_a_time_episode`**: un DJ set può esistere solo per il booking, oppure
   essere marcato per comparire anche come episodio numerato nel formato Once Upon A Time — evita
   di duplicare il contenuto in due collection.
-- **Permessi**: il bootstrap crea solo lo schema. Il ruolo "content editor" (accesso limitato ai
-  contenuti, niente schema/utenti/impostazioni) va creato a mano nel pannello — Directus non
-  espone questa parte in modo altrettanto sicuro da automatizzare con un token statico ad ampio
-  raggio.
+- **Permessi**: `bootstrap/permissions.mjs` concede alla policy Public (anonima) sola lettura
+  sui contenuti pubblicati/attivi, e sola scrittura (`create`) su `form_submissions` — nessuno può
+  rileggere le richieste inviate da altri. Il ruolo "content editor" per un admin umano (accesso
+  limitato ai contenuti, niente schema/utenti/impostazioni) resta invece da creare a mano nel
+  pannello: è un concetto diverso (permessi di un utente autenticato, non del pubblico anonimo).
 
-## Token per il sito
+## Come legge il sito
 
-Il sito (in `app/`) legge i contenuti con un token **statico**, di sola lettura, associato a un
-ruolo pubblico che vede solo i record pubblicati. Non usare mai il token/le credenziali admin nel
-frontend. Crea il ruolo e il token dal pannello Directus dopo il primo bootstrap, poi impostali
-come `DIRECTUS_TOKEN` nell'app.
+Il sito (in `app/`) legge i contenuti in anonimo, sfruttando i permessi pubblici impostati da
+`permissions.mjs` — `DIRECTUS_TOKEN` può restare vuoto. Impostalo solo se in futuro serve un
+accesso più ampio di quello pubblico (es. contenuti non pubblicati in anteprima): in tal caso usa
+un token di un ruolo dedicato e di sola lettura, mai le credenziali admin.

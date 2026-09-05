@@ -1,0 +1,7 @@
+{$DOMAIN}, www.{$DOMAIN} {
+	reverse_proxy app:3000
+}
+
+admin.{$DOMAIN} {
+	reverse_proxy directus:8055
+}
