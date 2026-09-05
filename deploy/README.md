@@ -85,6 +85,22 @@ node bootstrap/bootstrap.mjs
 - `https://teknofavola.it` → sito
 - `https://admin.teknofavola.it` → pannello Directus
 
+## Avvio automatico al riavvio del server
+
+Le immagini hanno già `restart: unless-stopped`, quindi Docker le fa ripartire da solo dopo un
+riavvio del sistema. In più, `teknofavola.service` dà un comando systemd unico per gestire tutto
+lo stack, invece di doversi ricordare `cd` + `docker compose up/down`:
+
+```bash
+sudo cp teknofavola.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now teknofavola
+```
+
+Poi `systemctl start|stop|restart|status teknofavola` gestisce l'intero stack (equivalgono a
+`docker compose up -d` / `down` nella cartella `deploy/`). Il servizio richiede l'utente `admin`
+del passo 4 — se cambi utente, aggiorna `User=`/`Group=`/`WorkingDirectory=` nel file.
+
 ## Aggiornare dopo un nuovo push
 
 ```bash
