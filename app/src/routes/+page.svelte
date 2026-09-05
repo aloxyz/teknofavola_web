@@ -9,8 +9,8 @@
 	let { data }: { data: PageData } = $props();
 
 	const heroVideoSrc = $derived(assetUrl(data.siteSettings.hero_bg_video));
-	const tagline = $derived(data.lang === 'it' ? data.siteSettings.tagline_it : data.siteSettings.tagline_en);
-	const bioHeading = $derived(data.lang === 'it' ? data.siteSettings.bio_heading_it : data.siteSettings.bio_heading_en);
+	const tagline = $derived(pickLocalized(data.siteSettings, 'tagline', data.lang));
+	const bioHeading = $derived(pickLocalized(data.siteSettings, 'bio_heading', data.lang));
 	const bioParagraph = $derived(pickLocalized(data.siteSettings, 'bio_paragraph', data.lang) ?? t(data.lang, 'bioParagraphPlaceholder'));
 </script>
 
@@ -50,7 +50,7 @@
 	</section>
 
 	<section style="padding:clamp(40px,7vw,96px) clamp(24px,5vw,80px);border-bottom:2px solid var(--tf-line)">
-		<h2 style="margin:0 0 26px;font-size:10px;letter-spacing:.28em;color:var(--tf-accent);font-weight:800">{t(data.lang, 'bioKicker')}</h2>
+		<h2 class="tf-kicker" style="margin:0 0 26px;font-weight:800">{t(data.lang, 'bioKicker')}</h2>
 		{#if bioHeading}
 			<p style="margin:0;font-weight:800;font-size:clamp(30px,4.6vw,68px);line-height:1.04;letter-spacing:-0.03em;max-width:20ch;text-wrap:pretty;color:var(--tf-ink)">{bioHeading}</p>
 		{/if}

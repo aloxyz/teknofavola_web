@@ -51,7 +51,7 @@
 		style="width:min(620px,100%);height:100%;overflow:auto;background:var(--tf-bg);border-left:2px solid var(--tf-line);padding:clamp(22px,3vw,40px)"
 	>
 		<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px">
-			<span style="font-size:10px;letter-spacing:.2em;color:var(--tf-accent)">FAVOLA {String(index + 1).padStart(2, '0')} / {t(lang, 'event')}</span>
+			<span style="font-size:10px;letter-spacing:.2em;color:var(--tf-accent)">{t(lang, 'favolaLabel')} {String(index + 1).padStart(2, '0')} / {t(lang, 'event')}</span>
 			<a
 				bind:this={closeBtn}
 				href={backHref}
@@ -80,12 +80,12 @@
 			{/each}
 		</div>
 		<div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px">
-			<h3 style="margin:0 0 10px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'description')}</h3>
+			<h3 class="tf-subheading" style="margin:0 0 10px;font-size:10px">{t(lang, 'description')}</h3>
 			<p style="margin:0;font-size:14px;line-height:1.7;color:var(--tf-ink-2)">{description}</p>
 		</div>
 		{#if lineup.length}
 			<div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px">
-				<h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'lineup')}</h3>
+				<h3 class="tf-subheading" style="margin:0 0 14px;font-size:10px">{t(lang, 'lineup')}</h3>
 				<div style="display:flex;flex-wrap:wrap;gap:2px">
 					{#each lineup as name (name)}
 						<span style="border:2px solid var(--tf-accent);color:var(--tf-accent);padding:9px 14px;font-size:11px;letter-spacing:.1em;font-weight:800">{name}</span>
@@ -95,7 +95,7 @@
 		{/if}
 		{#if gallery.length}
 			<div style="margin-top:26px;border-top:2px solid var(--tf-line);padding-top:20px;padding-bottom:40px">
-				<h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'gallery')}</h3>
+				<h3 class="tf-subheading" style="margin:0 0 14px;font-size:10px">{t(lang, 'gallery')}</h3>
 				<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">
 					{#each gallery as src (src)}
 						<img {src} alt="" loading="lazy" style="aspect-ratio:1/1;object-fit:cover;border:2px solid var(--tf-line-2)" />

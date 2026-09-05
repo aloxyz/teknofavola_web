@@ -3,6 +3,7 @@
 	import { assetUrl } from '$lib/utils/assets';
 	import { pickLocalized } from '$lib/utils/localized';
 	import { PROFILE_TYPE_LABEL } from '$lib/config/profileTypes';
+	import { withUrl } from '$lib/utils/records';
 	import VideoEmbed from './VideoEmbed.svelte';
 	import ContactForm from './ContactForm.svelte';
 	import type { ArtistRecord, DjSetRecord } from '$lib/types/directus';
@@ -21,13 +22,13 @@
 	const workPhotos = $derived((artist.work_photos ?? []).slice(0, 3).map((w) => assetUrl(w.file, 'width=700&quality=85')));
 
 	const socials = $derived(
-		[
+		withUrl([
 			{ platform: 'INSTAGRAM', url: artist.instagram_url },
 			{ platform: 'SOUNDCLOUD', url: artist.soundcloud_url },
 			{ platform: 'SPOTIFY', url: artist.spotify_url },
 			{ platform: 'YOUTUBE', url: artist.youtube_url },
 			{ platform: lang === 'it' ? 'ALTRO' : 'OTHER', url: artist.other_url }
-		].filter((s) => !!s.url)
+		])
 	);
 
 	const bookingFieldLabels = $derived(
@@ -69,16 +70,16 @@
 	{/if}
 
 	<div style="margin-top:36px;border-top:2px solid var(--tf-line);padding-top:22px">
-		<h3 style="margin:0 0 12px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'bio')}</h3>
+		<h3 class="tf-subheading" style="margin:0 0 12px;font-size:10px">{t(lang, 'bio')}</h3>
 		<p style="margin:0;font-size:15px;line-height:1.65;max-width:60ch;color:var(--tf-ink-2)">{bio}</p>
 	</div>
 
 	<div style="margin-top:30px;border-top:2px solid var(--tf-line);padding-top:22px">
-		<h3 style="margin:0 0 14px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'social')}</h3>
+		<h3 class="tf-subheading" style="margin:0 0 14px;font-size:10px">{t(lang, 'social')}</h3>
 		{#if socials.length}
 			<div style="display:flex;flex-wrap:wrap;gap:2px">
 				{#each socials as s (s.platform)}
-					<a href={s.url} target="_blank" rel="noopener" class="tf-artistsocial" style="border:2px solid var(--tf-accent);color:var(--tf-accent);padding:9px 14px;font-size:10px;letter-spacing:.16em;font-weight:800">{s.platform}</a>
+					<a href={s.url} target="_blank" rel="noopener" class="tf-pill-link" style="border-color:var(--tf-accent);color:var(--tf-accent);padding:9px 14px;font-size:10px;letter-spacing:.16em">{s.platform}</a>
 				{/each}
 			</div>
 		{:else}
@@ -88,7 +89,7 @@
 
 	{#if isDj}
 		<div style="margin-top:30px;border-top:2px solid var(--tf-line);padding-top:22px">
-			<h3 style="margin:0 0 16px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">DJ SET</h3>
+			<h3 class="tf-subheading" style="margin:0 0 16px;font-size:10px">{t(lang, 'djSetHeading')}</h3>
 			{#if djSetsError}
 				<span style="font-size:12px;color:var(--tf-ink-2)">{t(lang, 'errorBody')}</span>
 			{:else if djSets.length}
@@ -117,9 +118,3 @@
 	/>
 </div>
 {/key}
-
-<style>
-	.tf-artistsocial:hover {
-		background: var(--tf-bg-3) !important;
-	}
-</style>

@@ -12,11 +12,11 @@
 
 <a
 	href="/favole/{event.slug}"
-	class="tf-eventcard"
+	class="tf-media-card"
 	style="display:flex;flex-direction:column;gap:14px;text-align:left;padding:22px;border:0;border-right:2px solid var(--tf-line);border-bottom:2px solid var(--tf-line);color:var(--tf-ink);min-width:0"
 >
 	<span style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:10px;letter-spacing:.16em;color:var(--tf-ink-3)">
-		<span>FAVOLA {String(index + 1).padStart(2, '0')}</span>
+		<span>{t(lang, 'favolaLabel')} {String(index + 1).padStart(2, '0')}</span>
 		<span style="color:var(--tf-accent);font-size:10px;letter-spacing:.16em">{dateLabel}</span>
 	</span>
 	{#if flyerSrc}
@@ -27,10 +27,3 @@
 	<span style="display:block;font-weight:900;font-size:19px;line-height:1.1;letter-spacing:-0.02em;overflow-wrap:anywhere">{event.title}</span>
 	<span style="display:block;font-size:10px;letter-spacing:.16em;color:var(--tf-accent)">{t(lang, 'openEvent')} →</span>
 </a>
-
-<style>
-	.tf-eventcard:hover {
-		background: var(--tf-bg-3);
-		color: var(--tf-ink);
-	}
-</style>

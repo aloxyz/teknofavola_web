@@ -5,7 +5,8 @@
 	import EpisodeCard from '$lib/components/ui/EpisodeCard.svelte';
 	import { t, type Locale } from '$lib/i18n/dictionary';
 	import { pickLocalized } from '$lib/utils/localized';
-	import type { ArtistRecord, DjSetRecord } from '$lib/types/directus';
+	import { unwrapArtist } from '$lib/utils/records';
+	import type { DjSetRecord } from '$lib/types/directus';
 
 	let {
 		lang,
@@ -21,9 +22,7 @@
 		contactEmail: string;
 	} = $props();
 
-	const artist = $derived(
-		activeEpisode && typeof activeEpisode.artist !== 'string' ? (activeEpisode.artist as ArtistRecord) : null
-	);
+	const artist = $derived(activeEpisode ? unwrapArtist(activeEpisode.artist) : null);
 	const bio = $derived(artist ? (pickLocalized(artist, 'bio', lang) ?? t(lang, 'bioEmpty')) : '');
 </script>
 
@@ -42,7 +41,7 @@
 			{#if artist}
 				<div style="display:flex;flex-direction:column;gap:20px">
 					<div>
-						<h3 style="margin:0 0 10px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'bio')}</h3>
+						<h3 class="tf-subheading" style="margin:0 0 10px;font-size:10px">{t(lang, 'bio')}</h3>
 						<p style="margin:0;font-size:14px;line-height:1.7;color:var(--tf-ink-2)">{bio}</p>
 					</div>
 					<a href="/booking/{artist.slug}" style="font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--tf-accent)">BOOKING → {artist.name}</a>
@@ -52,7 +51,7 @@
 	</div>
 {:else}
 	<div>
-		<PageTitle kicker="03 / {t(lang, 'onceEpisodesKicker')}" titleLines={['ONCE UPON', 'A TIME']} intro={t(lang, 'latestFirst')} />
+		<PageTitle kicker="04 / {t(lang, 'onceEpisodesKicker')}" titleLines={['ONCE UPON', 'A TIME']} intro={t(lang, 'latestFirst')} />
 		<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:0;border-bottom:2px solid var(--tf-line)">
 			{#each episodes as ep (ep.id)}
 				<EpisodeCard episode={ep} {lang} />

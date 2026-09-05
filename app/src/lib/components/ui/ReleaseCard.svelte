@@ -1,20 +1,21 @@
 <script lang="ts">
 	import { assetUrl } from '$lib/utils/assets';
 	import { pickLocalized } from '$lib/utils/localized';
-	import type { ArtistRecord, ReleaseRecord } from '$lib/types/directus';
-	import type { Locale } from '$lib/i18n/dictionary';
+	import { unwrapArtist, withUrl } from '$lib/utils/records';
+	import type { ReleaseRecord } from '$lib/types/directus';
+	import { t, type Locale } from '$lib/i18n/dictionary';
 
 	let { release, lang }: { release: ReleaseRecord; lang: Locale } = $props();
 
-	const artist = $derived(typeof release.artist === 'string' ? null : (release.artist as ArtistRecord));
+	const artist = $derived(unwrapArtist(release.artist));
 	const coverSrc = $derived(assetUrl(release.cover, 'width=600&quality=85'));
 	const description = $derived(pickLocalized(release, 'description', lang));
 	const links = $derived(
-		[
+		withUrl([
 			{ label: 'SPOTIFY', url: release.spotify_url },
 			{ label: 'SOUNDCLOUD', url: release.soundcloud_url },
 			{ label: 'YOUTUBE', url: release.youtube_url }
-		].filter((l) => !!l.url)
+		])
 	);
 </script>
 
@@ -30,7 +31,7 @@
 	{/if}
 	{#if release.mix_engineer || release.master_engineer}
 		<span style="font-size:10px;letter-spacing:.1em;color:var(--tf-ink-3)">
-			{#if release.mix_engineer}MIX: {release.mix_engineer}{/if}{#if release.mix_engineer && release.master_engineer} · {/if}{#if release.master_engineer}MASTER: {release.master_engineer}{/if}
+			{#if release.mix_engineer}{t(lang, 'mixLabel')}: {release.mix_engineer}{/if}{#if release.mix_engineer && release.master_engineer} · {/if}{#if release.master_engineer}{t(lang, 'masterLabel')}: {release.master_engineer}{/if}
 		</span>
 	{/if}
 	{#if description}
@@ -39,14 +40,8 @@
 	{#if links.length}
 		<div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:auto">
 			{#each links as l (l.label)}
-				<a href={l.url} target="_blank" rel="noopener" class="tf-releaselink" style="border:2px solid var(--tf-accent);color:var(--tf-accent);padding:8px 12px;font-size:10px;letter-spacing:.14em;font-weight:800">{l.label}</a>
+				<a href={l.url} target="_blank" rel="noopener" class="tf-pill-link" style="border-color:var(--tf-accent);color:var(--tf-accent);padding:8px 12px;font-size:10px;letter-spacing:.14em">{l.label}</a>
 			{/each}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.tf-releaselink:hover {
-		background: var(--tf-bg-3) !important;
-	}
-</style>

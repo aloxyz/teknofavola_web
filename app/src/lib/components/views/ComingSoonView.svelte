@@ -40,6 +40,10 @@
 		error: boolean;
 		contactEmail: string;
 	} = $props();
+
+	// Defensive: callers already filter to channels with a url, but this
+	// component shouldn't rely on that to avoid ever rendering a bare href.
+	const safeChannels = $derived(channels.filter((c) => !!c.url));
 </script>
 
 {#if error}
@@ -47,22 +51,22 @@
 {:else}
 	<div>
 		<header style="padding:clamp(36px,6vw,88px) clamp(24px,5vw,80px) 30px;border-bottom:2px solid var(--tf-line)">
-			<span style="display:block;font-size:10px;letter-spacing:.28em;color:var(--tf-accent);margin-bottom:18px">{kicker}</span>
+			<span class="tf-kicker" style="display:block;margin-bottom:18px">{kicker}</span>
 			<h1 style="margin:0;font-size:clamp(32px,6.6vw,96px);line-height:.94;letter-spacing:-0.04em">{titleA}<br />{titleB}</h1>
 			<p style="margin:24px 0 0;font-size:13px;line-height:1.7;max-width:56ch;color:var(--tf-ink-2)">{intro}</p>
 		</header>
 
 		<section style="padding:clamp(44px,8vw,120px) clamp(24px,5vw,80px);border-bottom:2px solid var(--tf-line);background:var(--tf-accent);color:var(--tf-bg)">
 			<h2 style="margin:0 0 18px;font-size:10px;letter-spacing:.28em;font-weight:800">{t(lang, 'status')}</h2>
-			<p style="margin:0;font-weight:900;font-size:clamp(44px,11vw,180px);line-height:.86;letter-spacing:-0.05em">COMING<br />SOON</p>
+			<p style="margin:0;font-weight:900;font-size:clamp(44px,11vw,180px);line-height:.86;letter-spacing:-0.05em">{t(lang, 'comingSoonWord1')}<br />{t(lang, 'comingSoonWord2')}</p>
 		</section>
 
 		<section style="padding:clamp(30px,4vw,56px) clamp(24px,5vw,80px);border-bottom:2px solid var(--tf-line)">
-			<h2 style="margin:0 0 20px;font-size:10px;letter-spacing:.2em;color:var(--tf-ink-3);font-weight:800">{t(lang, 'channels')}</h2>
-			{#if channels.length}
+			<h2 class="tf-subheading" style="margin:0 0 20px;font-size:10px">{t(lang, 'channels')}</h2>
+			{#if safeChannels.length}
 				<div style="display:flex;flex-wrap:wrap;gap:2px">
-					{#each channels as c (c.id)}
-						<a href={c.url} target="_blank" rel="noopener" class="tf-channel" style="border:2px solid var(--tf-accent);color:var(--tf-accent);padding:12px 16px;font-size:11px;letter-spacing:.16em;font-weight:800">{c.platform}</a>
+					{#each safeChannels as c (c.id)}
+						<a href={c.url} target="_blank" rel="noopener" class="tf-pill-link" style="border-color:var(--tf-accent);color:var(--tf-accent);padding:12px 16px;font-size:11px;letter-spacing:.16em">{c.platform}</a>
 					{/each}
 				</div>
 			{:else}
@@ -89,9 +93,3 @@
 		</section>
 	</div>
 {/if}
-
-<style>
-	.tf-channel:hover {
-		background: var(--tf-bg-3) !important;
-	}
-</style>

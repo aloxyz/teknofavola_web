@@ -86,7 +86,15 @@ export const COPY = {
 		requestingProduct: 'RICHIESTA PER',
 		aboutMoreLink: 'LA NOSTRA STORIA →',
 		aboutBodyEmpty: 'La storia del collettivo sarà pubblicata a breve.',
-		aboutKicker: '01 / CHI SIAMO'
+		aboutKicker: '01 / CHI SIAMO',
+		favolaLabel: 'FAVOLA',
+		comingSoonWord1: 'IN',
+		comingSoonWord2: 'ARRIVO',
+		djSetHeading: 'DJ SET',
+		mixLabel: 'MIX',
+		masterLabel: 'MASTER',
+		homeLabel: 'HOME',
+		videoIframeTitle: 'video'
 	},
 	en: {
 		menu: 'MENU',
@@ -168,7 +176,15 @@ export const COPY = {
 		requestingProduct: 'REQUEST FOR',
 		aboutMoreLink: 'OUR STORY →',
 		aboutBodyEmpty: 'The collective’s story will be published shortly.',
-		aboutKicker: '01 / ABOUT US'
+		aboutKicker: '01 / ABOUT US',
+		favolaLabel: 'FABLE',
+		comingSoonWord1: 'COMING',
+		comingSoonWord2: 'SOON',
+		djSetHeading: 'DJ SET',
+		mixLabel: 'MIX',
+		masterLabel: 'MASTER',
+		homeLabel: 'HOME',
+		videoIframeTitle: 'video'
 	}
 } as const;
 
